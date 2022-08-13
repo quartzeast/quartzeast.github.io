@@ -1,10 +1,10 @@
-baseURL: http://example.org/
+baseURL: https://daswunderland/
 languageCode: en-us
-title: Das Fantasie-Lied
+title: Das Wunderland
 theme: mini
 
 # Default content language, support en (English) / zh (Chinese) / nl (Dutch) / fr (French) / es (Spanish), default 'en'
-defaultContentLanguage: zh
+defaultContentLanguage: en
 hasCJKLanguage: true
 permalinks:
   posts: /posts/:title/

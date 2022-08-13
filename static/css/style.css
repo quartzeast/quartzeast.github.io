@@ -90,6 +90,11 @@ pre {
   word-break: normal;
   overflow-wrap: anywhere;
 }
+
+pre {
+  font-size: 0.9rem;
+}
+
 .markdown-image img {
   max-width: 100%;
 }
@@ -114,18 +119,19 @@ h4:hover a {
   overflow-x: auto;
 }
 p code {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
   font-size: inherit;
-  background-color: rgba(0, 0, 0, 0.06);
-  padding: 0 2px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 2px 2px;
   line-height: inherit;
   word-wrap: break-word;
   text-indent: 0;
 }
 pre code {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
+}
+
+li code {
+  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
 }
 
 
@@ -350,7 +356,7 @@ nav.navigation a.button {
 
 /* single page */
 #single {
-  max-width: 680px;
+  max-width: 760px;
   margin: 60px auto 0 auto;
   padding: 0 64px;
 }
