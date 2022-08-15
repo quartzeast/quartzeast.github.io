@@ -13,5 +13,5 @@ I'm a DevOps Engineer and a Golang developer experienced in Cloud Native. I grad
 
 Contacts me:
 
-- [Email](mailto://quartzeast@gmai.com)
+- [Email](quartzeast@gmail.com)
 - [Github](https://github.com/quartzeast)
