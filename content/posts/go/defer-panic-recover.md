@@ -175,7 +175,66 @@ func c() (i int) {
 
 这样做可以方便地修改函数的错误返回值。
 
-[Todo]
+## Panic 和 Recover
+
+`panic` 是一个内置函数，它能终止代码的执行流程并开始恐慌（_panicking_）。当函数 `F` 调用 `panic` 时，`F` 停止执行，`F` 中所有延迟函数调用和平时一样开始执行，然后 `F` 返回至调用者。对调用者来说，`F` 的行为就像是对 `panic` 的调用。该过程会继续向函数栈上进行，直到当前 goroutine 中的所有函数都返回，此时程序崩溃。Panic 可以通过直接调用 `panic` 来触发，但也可能是由运行时错误引起的，例如数组访问越界。
+
+`recover` 也是一个内置函数，可以重新控制 panicking 的 goroutine。Recover 仅在延迟函数中有效。在正常执行期间，调用 `recover` 将返回 `nil` 并且没有其他效果。如果当前的 goroutine 正在 panic，对 `recovery` 的调用将捕获给 `panic` 传的值并恢复正常执行。
+
+下面的示例程序演示了 panic 和 recover 的机制：👇🏻
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	f()
+	fmt.Println("Returned normally from f.")
+}
+
+func f() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in f", r)
+		}
+	}()
+	fmt.Println("Calling g.")
+	g(0)
+	fmt.Println("Returned normally from g.")
+}
+
+func g(i int) {
+	if i > 3 {
+		fmt.Println("Panicking!")
+		panic(fmt.Sprintf("%v", i))
+	}
+	defer fmt.Println("Defer in g", i)
+	fmt.Println("Printing in g", i)
+	g(i + 1)
+}
+```
+
+函数 `g` 中如果 `i` 大于 `3` 则 panic，否则递归地使用参数 `i+1` 调用自身。函数 `f` 延迟了一个匿名函数调用，该匿名函数中调用了 `recover` 并打印被 recover 的值（如果它不是 `nil`）。
+
+该程序将输出：
+
+```
+Calling g.
+Printing in g 0
+Printing in g 1
+Printing in g 2
+Printing in g 3
+Panicking!
+Defer in g 3
+Defer in g 2
+Defer in g 1
+Defer in g 0
+Recovered in f 4
+Returned normally from f.
+```
+
+如果我们从 `f` 中删除延迟函数，则 panic 不会被 recover 并一直 panic 到 goroutine 调用栈的顶部，从而终止程序。
 
 ## 参考
 
@@ -185,3 +244,7 @@ func c() (i int) {
 - [详解恐慌和恢复原理](https://gfw.go101.org/article/panic-and-recover-more.html)
 - [一些恐慌/恢复用例](https://gfw.go101.org/article/panic-and-recover-use-cases.html)
 - [On the uses and misuses of panics in Go](https://eli.thegreenplace.net/2018/on-the-uses-and-misuses-of-panics-in-go/)
+- [Go 的 defer 的特性还是有必要要了解下](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247486773&idx=1&sn=824b30118c370ca85093ccea38bfb2f9&chksm=cf3e1df0f84994e64f707d6a171946d202bb8738f5441108b3e66a29b20cd14cfa9f2732d00f&scene=178&cur_album_id=1749948750287978500#rd)
+- [深入剖析 defer 原理篇 —— 函数调用的原理](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247486774&idx=1&sn=3b59ac2efc97b7bbebbde366d0ee4ea0&chksm=cf3e1df3f84994e5c988bc00d369c12884f75a3234912cccd04c53142c334b0488118ff43ea0&scene=178&cur_album_id=1749948750287978500#rd)
+- [深度细节 | Go 的 panic 的三种诞生方式](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247493867&idx=1&sn=9fef8e55b8220976d6362658d5188618&chksm=cf3df82ef84a7138f21b6fea9e719b204b0f7adaab5632cc8aff8b6966c985300d4af2a71bcd&scene=178&cur_album_id=1749948750287978500#rd)
+- [深度细节 | Go 的 panic 的秘密都在这](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247493933&idx=1&sn=09f0d2a0f182fa1b95134c7b5c90c72d&chksm=cf3df9e8f84a70fe74b6b76f32b69b3ea74f105c4dd1c185751670c374ddccb0711adb7a41b5&scene=178&cur_album_id=1749948750287978500#rd)
