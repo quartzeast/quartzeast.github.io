@@ -12,3 +12,4 @@ tags:
 ## 参考
 
 - [Docker 核心技术与实现原理](https://draveness.me/docker/)
+- [DOCKER基础技术：LINUX NAMESPACE（上）](https://coolshell.cn/articles/17010.html)

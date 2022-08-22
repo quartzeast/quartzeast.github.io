@@ -248,3 +248,4 @@ Returned normally from f.
 - [深入剖析 defer 原理篇 —— 函数调用的原理](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247486774&idx=1&sn=3b59ac2efc97b7bbebbde366d0ee4ea0&chksm=cf3e1df3f84994e5c988bc00d369c12884f75a3234912cccd04c53142c334b0488118ff43ea0&scene=178&cur_album_id=1749948750287978500#rd)
 - [深度细节 | Go 的 panic 的三种诞生方式](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247493867&idx=1&sn=9fef8e55b8220976d6362658d5188618&chksm=cf3df82ef84a7138f21b6fea9e719b204b0f7adaab5632cc8aff8b6966c985300d4af2a71bcd&scene=178&cur_album_id=1749948750287978500#rd)
 - [深度细节 | Go 的 panic 的秘密都在这](https://mp.weixin.qq.com/s?__biz=Mzg3NTU3OTgxOA==&mid=2247493933&idx=1&sn=09f0d2a0f182fa1b95134c7b5c90c72d&chksm=cf3df9e8f84a70fe74b6b76f32b69b3ea74f105c4dd1c185751670c374ddccb0711adb7a41b5&scene=178&cur_album_id=1749948750287978500#rd)
+- [Go 多协程并发环境下的异常处理](https://segmentfault.com/a/1190000023691221)
