@@ -38,8 +38,6 @@ params:
   # Site Description, used in HTML meat
   description: My Blog
 
-  hiddenPostSummaryInHomePage: true
-
   ###########################################
   # Optional Configuration
   # To enable table of content, you could set `showToc: true`, default is `false`
