@@ -1,10 +1,10 @@
 ---
-title: 'Kuberntes 的垃圾回收策略之概念篇'
+title: "Kuberntes 的垃圾回收策略之概念篇"
 date: 2022-07-12T08:46:04+08:00
 draft: false
 tags:
-  - 'Kubernetes'
-  - 'Cloud Native'
+  - "Kubernetes"
+  - "Cloud Native"
 ---
 
 垃圾回收是 Kubernetes 用来清理集群资源的各种机制的统称。
@@ -163,7 +163,7 @@ Job 控制器还为这些 Pod 添加了 Owner Reference，指向创建 Pod 的 J
 
 在某些情况下，Finalizers 会阻止 dependent 对象的删除，这可能导致目标 owner 对象被保留的时间比预期的长，而没有被完全删除。在这些情况下，我们应该检查目标 owner 和 dependent 象上的 Finalizers 和 Owner Reference 来排查原因。
 
-> 说明：在对象卡在删除状态的情况下，要避免手动移除 Finalizers，以允许继续删除操作。Finalizers 通常因为特殊原因被添加到资源上，所以强行删除它们会导致集群出现问题。 只有了解 finalizer 的用途时才能这样做，并且应该通过一些其他方式来完成 （例如，手动清除其余的依赖对象）。
+> 说明：在对象卡在删除状态的情况下，要避免手动移除 Finalizers，以允许继续删除操作。Finalizers 通常是因为特殊的原因被添加到资源上，所以强行删除它们可能会导致集群出问题，所以只有当真正理解 finalizer 的作用时才能这样做，并且应该通过一些其他方式来完成（例如，手动清除其余的依赖对象）。
 
 ### 所有权和 Finalizers
 
