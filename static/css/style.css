@@ -130,6 +130,10 @@ pre code {
   font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
 }
 
+code {
+  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace !important;
+}
+
 li code {
   font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
 }

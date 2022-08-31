@@ -1,16 +1,16 @@
 ---
 title: "认证与鉴权"
 date: 2022-08-24T12:35:57+08:00
-draft: true
+draft: false
 author: "Hugo Authors"
 description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 tags:
   - "Web"
 ---
 
-认证和授权是我们在 Web 开发中首先就需要考虑的问题，但是由于多种认证授权机制的多样性和复杂性，这也成为了多数程序员难以跨越的一座大山，本文不细究每种认证机制的流程和工作原理，而是从整体上了解各种认证授权机制，让我们做到心中有数，不再畏惧认证和授权的开发。
+认证和鉴权一直是 Web 开发中的一个难点，本文将概括和分析 HTTP 的通用认证框架和常见的认证鉴权方式。
 
-## 认证与鉴权
+## 什么是认证与鉴权
 
 ### 认证（Authentication）
 
@@ -84,15 +84,16 @@ IANA 维护着一系列[身份验证方案](https://www.iana.org/assignments/htt
 
 具体可查看 MDN 文档：[Authentication schemes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes)
 
+## 常见的认证模型
+
 ## 参考
 
 - [Hypertext Transfer Protocol (HTTP/1.1): Authentication](https://datatracker.ietf.org/doc/html/rfc7235)
-- [傻傻分不清之 Cookie、Session、Token、JWT](https://juejin.cn/post/6844904034181070861)
-- [Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)
-- [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
-- [前端开发登录鉴权方案完全梳理](https://tsejx.github.io/blog/authentication/)
-- [HTTP API 认证授权术](https://coolshell.cn/articles/19395.html)
 - [ HTTP Authentication: Basic and Digest Access Authentication](https://datatracker.ietf.org/doc/html/rfc2617)
+- [HTTP API 认证授权术](https://coolshell.cn/articles/19395.html)
+- [傻傻分不清之 Cookie、Session、Token、JWT](https://juejin.cn/post/6844904034181070861)
+- [网络数字身份认证技术](https://coolshell.cn/articles/21708.html)
+- [Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)
+- [前端开发登录鉴权方案完全梳理](https://tsejx.github.io/blog/authentication/)
 - [Basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
 - [Basic auth for REST APIs](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/#basic-auth-for-rest-apis)
-- [网络数字身份认证术](https://coolshell.cn/articles/21708.html)
