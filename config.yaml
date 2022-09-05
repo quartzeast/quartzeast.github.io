@@ -19,7 +19,7 @@ disqusShortname: your-disqus-shortname
 markup:
   highlight:
     guessSyntax: true
-    style: emacs
+    style: monokailight
   tableOfContents:
     endLevel: 3
     ordered: false

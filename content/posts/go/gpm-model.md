@@ -1,7 +1,7 @@
 ---
 title: "Go 语言中的 GPM 模型"
 date: 2022-08-16T17:18:50+08:00
-draft: true
+draft: false
 author: "Hugo Authors"
 description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 tags:
