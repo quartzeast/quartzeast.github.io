@@ -4,7 +4,7 @@ html[theme='dark-mode'] {
 
 body {
   line-height: 1;
-  font: normal 15px/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: normal 14px/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #404040;
   line-height: 1.75;
   letter-spacing: 0.008em;
@@ -92,7 +92,7 @@ pre {
 }
 
 pre {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .markdown-image img {
@@ -118,24 +118,25 @@ h4:hover a {
   max-width: 100%;
   overflow-x: auto;
 }
-p code {
-  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
-  font-size: inherit;
+p code, li code {
+  font-family: fira code, monospace;
+  font-size: 0.8rem;
+  color: #00a8c8;
   border-radius: 2px 2px;
   line-height: inherit;
   word-wrap: break-word;
   text-indent: 0;
 }
 pre code {
-  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
+  font-family: fira code, monospace;
 }
 
 code {
-  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace !important;
+  font-family: fira code, monospace !important;
 }
 
 li code {
-  font-family: OverpassMono Nerd Font, Menlo, Courier, monospace;
+  font-family: fira code, monospace;
 }
 
 

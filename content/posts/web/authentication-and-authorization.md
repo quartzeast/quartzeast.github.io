@@ -84,7 +84,69 @@ IANA 维护着一系列[身份验证方案](https://www.iana.org/assignments/htt
 
 具体可查看 MDN 文档：[Authentication schemes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes)
 
-## 常见的认证模型
+## 常见的认证方案
+
+### BASIC 认证方案
+
+基本认证可查看 MDN 的文档：[BASIC Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic_authentication_scheme)
+
+下面是使用 Go 实现的基本认证服务器：
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+type User struct {
+	name string
+	pass string
+}
+
+// 校验失败
+func AuthFailed(w http.ResponseWriter, errMsg string) {
+	w.Header().Set("WWW-Authenticate", `Basic realm="My REALM"`)
+	w.WriteHeader(401)
+	w.Write([]byte(errMsg))
+}
+
+type HandlerFunc func(http.ResponseWriter, *http.Request)
+
+// BASIC　auth 中间件
+func basicAuthMiddleware(h HandlerFunc) HandlerFunc {
+	// 返回一个通过封装的　handleFunc
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Basic Auth 校验
+		user, pass, ok := r.BasicAuth()
+		if !ok {
+			AuthFailed(w, "401 Unauthorized!")
+			return
+		}
+
+		users := make(map[string]string)
+		users["iris"] = "1234"
+		users["morty"] = "4321"
+		syspass, ok := users[user]
+		if !ok || pass != syspass {
+			AuthFailed(w, "401 Unauthorized Password error!")
+			return
+		}
+		// 真正要处理的业务
+		h(w, r)
+	}
+}
+
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Hello"))
+}
+
+func main() {
+	http.HandleFunc("/auth", basicAuthMiddleware(HelloHandler))
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+```
 
 ## 参考
 
@@ -97,3 +159,4 @@ IANA 维护着一系列[身份验证方案](https://www.iana.org/assignments/htt
 - [前端开发登录鉴权方案完全梳理](https://tsejx.github.io/blog/authentication/)
 - [Basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
 - [Basic auth for REST APIs](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/#basic-auth-for-rest-apis)
+- [如何在 Golang 中正确使用基本身份认证（HTTP Basic Authentication）](https://mhxw.life/note/2021/07/15/basic-authentication-in-go/)
