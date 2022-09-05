@@ -299,3 +299,4 @@ var DefaultTransport RoundTripper = &Transport{
 ## 参考
 
 - [http.Client 的连接行为控制详解](https://tonybai.com/2021/04/02/go-http-client-connection-control/)
+- [HTTP](https://draveness.me/golang/docs/part4-advanced/ch09-stdlib/golang-net-http/)
