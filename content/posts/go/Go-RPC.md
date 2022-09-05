@@ -9,9 +9,7 @@ tags:
   - "Distributed Computing"
 ---
 
-在分布式计算中，远程过程调用 (RPC) 是指计算机程序中的一个过程（procedure）或子例程（subroutine）在不同的地址空间（通常在共享网络上的另一台计算机上）执行。但是编程时可以像调用本地例程一样直接调用它们，不用关心远程交互的细节。
-
-RPC 是分布式系统中不同节点间流行的一种通信方式。
+RPC（Remote Procedure Call Protocol）——远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。该协议允许运行于一台计算机的程序调用另一台计算机的子程序，而程序员无需额外地为这个交互作用编程。RPC 协议假定某些传输协议的存在，如 TCP 或 UDP，为通信程序之间携带信息数据。在 OSI 网络通信模型中，RPC 跨越了传输层和应用层。RPC 使得开发包括网络分布式多程序在内的应用程序更加容易。
 
 ## 参考
 
@@ -19,3 +17,4 @@ RPC 是分布式系统中不同节点间流行的一种通信方式。
 - [Remote Procedure Call-IBM](https://www.ibm.com/docs/en/aix/7.1?topic=concepts-remote-procedure-call)
 - [Understanding RPC Vs REST For HTTP APIs](https://www.smashingmagazine.com/2016/09/understanding-rest-and-rpc-for-http-apis/)
 - [RPC 和 Protobuf](https://chai2010.cn/advanced-go-programming-book/ch4-rpc/index.html)
+- [既然有 HTTP 协议，为什么还要有 RPC](https://mp.weixin.qq.com/s/0QWxFylodn7T6nvcS6HsDg)
