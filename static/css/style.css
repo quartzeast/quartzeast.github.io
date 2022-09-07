@@ -119,7 +119,7 @@ h4:hover a {
   overflow-x: auto;
 }
 p code, li code {
-  font-family: fira code, monospace;
+  font-family: monospace;
   font-size: 0.8rem;
   color: #00a8c8;
   border-radius: 2px 2px;
@@ -128,15 +128,15 @@ p code, li code {
   text-indent: 0;
 }
 pre code {
-  font-family: fira code, monospace;
+  font-family: monospace;
 }
 
 code {
-  font-family: fira code, monospace !important;
+  font-family: monospace !important;
 }
 
 li code {
-  font-family: fira code, monospace;
+  font-family: monospace;
 }
 
 
