@@ -19,7 +19,7 @@ disqusShortname: your-disqus-shortname
 markup:
   highlight:
     guessSyntax: true
-    style: monokailight
+    style: dracula
   tableOfContents:
     endLevel: 3
     ordered: false
