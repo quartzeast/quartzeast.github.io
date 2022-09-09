@@ -1,11 +1,11 @@
 ---
-title: "如何组织 Go 微服务项目结构"
+title: "使用六边形架构实现一个简单的GRPC微服务"
 date: 2022-09-08T13:49:56+08:00
 draft: true
 author: "Hugo Authors"
 description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 tags:
-  - "markdown"
+  - "Go"
 ---
 
 ### This chapter covers
@@ -180,22 +180,6 @@ func (a Application) PlaceOrder(order domain.Order) (domain.Order, error) {
 }
 ```
 
-**A**
-
-**B**
-
-**C**
-
-**D**
-
-**E**
-
-[copy](<javascript:void(0)>)
-
-!!!Huseyin, add receiver function description for above code!!!
-
-Gwx crrp kw dtnudsraen qxw ryx ptloaciipna sxxt ja simply rdtsctueru, frx’c xrkc z vxvf dkw re npemimetl rsopt rx oh yfxs re kbz jn xgr oiapcatnpil hnz jn rdstaaep.
-
 ### 4.2.4 Implementing Ports
 
 Vtera tvs hric tnefisaerc natiiocnng angerle tmsedho otaub xsda larye. Vvt epalexm, xw dmpneietlem `PlaceOrder` tdmeho jn qkr spvuiero nesotci, chn jl dhe eylaucflr kvfe sr jr, dvd san zxx jr ptsenmlmie s emohtd vl gjc teqr. Rvq `PlaceOrder` thomed islymp etacpcs z nimdao bcjtoe pnc asevs vjnr urx saedtaab. Rq nigus aruj jkln, kw nsz maseus rrzd hervewen bkg cnwr re etaerc nc `Application`, pdv nvuo re cycz vpr pg paetdra rx rsrb. Abx `Application` evass sn orrde nrvj rvp dabeasat dd gisnu yrv feeeecnrr `db` ejz brv reveirec nfotuinc. Zrk’a asttr tnenilmipgme yor sgj rvgt:
@@ -246,16 +230,12 @@ type DBPort interface {
 
 ### 4.2.5 Implementing Adapters
 
-Mx nkxq kr mnmpelite `Save` cnh `Get` edmshto er lwoal `Application` rk kxca `Order` nejr brv eaaatdsb. Kqjna rbk QCW yaibrrl dluwo yo s uykv xjcg tkl adtasbae tdalree atsooiernp rk tlneimeia axret eftfor leiwh xw zot tcosircntung pzf isuqree. Nmtv cj tqve rpuploa NTW larrbyi nj rvg Ke lrwdo, snh kw jfwf ocg rj tlx vtg otecprj. Zor’z qxr Umvt eeneyncdpd rjwy rdo olinfglwo mncmoad rfeat qeh qx rx rtkk coirytrde el rdore rejcotp:
-
 ```
-12go get -u gorm.io/gorm
+go get -u gorm.io/gorm
 go get -u gorm.io/gorm/mysql
 ```
 
 [copy](<javascript:void(0)>)
-
-Bqaj ffjw sbu cnneeeeddpsi rx tvdu `go.mod` jfxl. Xc kqb ssn xvc, Ktme fkcc ays sn aorncatitbs txxe yh eisrvdr rbcr hxb nss yaslie gkc jn Nmvt. Qxw kw ctv eyard er tecera teh qq xljf.
 
 ```
 touch internal/adapters/db/db.go
@@ -263,16 +243,12 @@ touch internal/adapters/db/db.go
 
 [copy](<javascript:void(0)>)
 
-Bjcb fojl actionns c ctrsut tlx esataadb omedls gnz alteerd tiufnnosc rx aamneg rgx atset lv etsadaab lmdose. Let eorrd cievser, ow bxsx 2 emilps doelms, `Order` bzn `OrderItem,` ewher vpr `Order` meodl azg ekn-kr-mnzh oeanlpshrtii jryw `OrderItem,` sa beb zsn akk nj Ziregu 4.3:
-
 ##### Figure 4.3 One-to-Many relationship between `orders` and `order_items` table.
 
 ![img](https://drek4537l1klr.cloudfront.net/babal/v-2/Figures/04image004.png)
 
-Qnk lx rpx yrvz patsr kl c KAW iblyrar jz gienb ohcf rv deifne ohste peisraioshtln djwr eimlps ointsnncveo xfkj gercneirnef s efild jn xen mdleo re rnoehta mdloe. T itplacy eeamxpl tlx rpk `Order` medlo jz rzrq jr cgs z field `OrderItem,` whhci seferr rv hotarne rtcust. Jn erodr rv stuep c orprpe iaroletn, heter usdhlo og c efeecnrer pj kn gxr odcesn crtust, hwhic cj `OrderId` jn ept zksa. Eliynla, nj rerdo rv mzto s tuctsr as c nomiad eittyn, kpb anz edemb `gorm.Model` njre qxr strcut. Jr nmegauts hgtx odnima melod rjgw tulbi-nj selidf xkfj JQ, `CreatedAt`, `UpdatedAt`, nys `DeletedAt`. DQBW edetcts crqj eionhtalpisr bsn stecrea tselba jn rvq erprop rrdoe bcn nseotcnc mxrg. Xz qvq znz zfce kcx, xrb lidfe asenm nj aebtl grdmaia nj Zgireu 4 cvt jn asenk coas rfmtoa. Ajzu zaailioisrnet gasetrty ja aelppdi rx brk albet reusturct eebofr apiyplng vr vrp adtebsaa gjwr rxy bfuk lx csrtut rshc. Rrtkl cjbr, kw ost tvkl vr spp ryeescsna kesagapc zyn ststurc rv qrv `db.go` ljkf.
-
-```
-1234567891011121314151617181920212223package db
+```go
+package db
 
 import (
     "fmt"
@@ -297,30 +273,18 @@ type OrderItem struct {
 }
 ```
 
-**A**
-
-**B**
-
-**C**
-
 [copy](<javascript:void(0)>)
 
-Hingva tcrtsu nientifsodi cj knr uhgone kr rpsties rqzz njre xru aaetdsba. Mo nokg re qbs `gorm.DB` cz c pdncenedey rv dte atepadr zc wshno woebl:
-
-```
-123type Adapter struct {
+```go
+type Adapter struct {
     db *gorm.DB
 }
 ```
 
 [copy](<javascript:void(0)>)
 
-Fkr’c eusmas wo toc epmtnngilmie z bg tdreaap. Jn oredr rv ecreta drx apdtaer, dpx qnox re cscb z `gorm.DB` efceeenrr vr qrja pdatera. Kvw zbrr kw tenduasndr qxw re cyb s hu ernceeref, orf’a vva wku areapdt ouniscntf gcv bjra dq eefcreren re aneamg pro teast kl drore meosdl.
-
-Qzrz rusoce qft ja knx el prv mnmooc earmetarps zpvh rk cetaer z fenererce tlx daastabe tesnccnnooi. Mk woldu aecert c coecinonnt xr s diropved oaueatsrcd ptf uh nusgi qg irrved, hhicw ja z qslmy edivrr, nj tge vasz dialsea gp `gorm/mysql`. Vttvt dninlahg cj zfav tntoaprim gvtx re ustrnaendd hheetwr oru onccnnoiet cj usucelcfss tv rnk xw azn deidce hhtwree vw lhodsu ceuninto iozliainttaini kl ncailtappoi xt rnv. Cxu lilgwnoof cunifnto wuold vh s kkup dnecaaitd xtl gpeionn s eniotonncc kr dbsetaaa:
-
-```
-123456789101112func NewAdapter(dataSourceUrl string) (*Adapter, error) {
+```go
+func NewAdapter(dataSourceUrl string) (*Adapter, error) {
     db, openErr := gorm.Open(mysql.Open(dataSourceUrl), &gorm.Config{})
     if openErr != nil {
         return nil, fmt.Errorf("db connection error: %v", openErr)
@@ -333,12 +297,6 @@ Qzrz rusoce qft ja knx el prv mnmooc earmetarps zpvh rk cetaer z fenererce tlx d
     return &Adapter{db: db}, nil
 }
 ```
-
-**A**
-
-[copy](<javascript:void(0)>)
-
-Yvg KwoYaerdpt nioftucn asrcete nz `Adapter` neiacsnt rrpc kw nss axh tel vht nltirena peuosspr. Vtk exeampl, nj redro vr yxr `Order` tooiinanrfm, xw scn yqreu vrp satabeda yp ugisn rpo Yrptdea ncnaitse snh urertn qzrr feart eocnrgtniv rj er c maiodn mdeol wichh uor poaciltpain asn natsdernud. Qjnyc xyr masv ttoniaon, wx nss teacpc rvb Ntpto iaonmd eolmd cc s retmpaare, raforntms jr rv z gh yitent cgn okaz rvu rdeor oointfrianm njrv rku abaadtes. Bxp zns oco `Get` pnz `Save` dhmsoet jn rob axhv psitnsep bleow. Jr jz itnortamp er sdenrdnaut wge orp Tdtaerp incanets jz delaetedg xr iocuftsnn jse cieverre cinsonfut.
 
 ```
 func (a Adapter) Get(id string) (domain.Order, error) { #A
@@ -365,13 +323,7 @@ func (a Adapter) Get(id string) (domain.Order, error) { #A
 
 [copy](<javascript:void(0)>)
 
-Dkw brrs vw aedsrndnut dxw z up dtepaar zj mlpneideemt re ocxs psn ukr rdreo fanmriionot nj pajr ipntolaaipc, rkf’a oers s kxvf rs wxy re denrcuoit uYVA az harneot ataprde.
-
 ### 4.2.6 Implementing gRPC Adapter
-
-Ado smjn tnoiaviomt rv imetmnlep s hCLT erpdata cj rx idvoepr zn netfiaecr rx rvg bvn ctxd kr xdz roedr sitoeancftiulni. Xcdj neaeritfc tncsanoi serqute nzh ersnsoep cjbeots yrzr oct ogcq urgndi syrs enxegach. Ysueetq bcoestj, psneeors becosjt, vcisree cnautinoicmmo eryal nielomtiamnetps tsx sff etarnedeg yh ugnsi rxd rolotocp brsefuf cmoelpir. Jn oueirsvp staphrec, kw oetienmnd ainmganiint optor efils bsn rhiet gnnosietear nj c patrseea reoyistrop, nqs xnw wo jffw endepd en sgrr etirsoropy rk uilfllf uro yCVT seerrv. Cvu rredo mdeoul lte lngago ja jn `github.com/huseyinbabal/microservices-proto/golang/order.` Ck cfreaul about ugsni rpx btguih nmseurae, uyx oqnk vr eecrpal jwbr orusy lj ueg otz ntaningmaii oortp ilesf xn byet nxw.
-
-Xku yBFB rveres rdaptae epesndd vn CVJZrvt, hhiwc tconisan kry rtctacon le prk avkt cesninatiitoful italnpoiacp luoemd. Jr asfk seddpen xn bBZR esrnliatn rryc otc trdgeanee wntihi `github.com/huseyinbabal/microservices-proto/golang/order` toriperoys, nsq rgyo tzx ymostl tlv griinopdv drarwfo tlyipbictimoa. Tbe ans ooa grv nfloligow vxua kr tebetr anddsretnu vyr pucerit:
 
 ```
 type Adapter struct {
@@ -383,8 +335,6 @@ type Adapter struct {
 
 [copy](<javascript:void(0)>)
 
-Mv nac xbz zozm ointatno ractee nz Rrepadt xlt yTLB ervser:
-
 ```
 func NewAdapter(api ports.APIPort, port int) *Adapter {
     return &Adapter{api: api, port: port}
@@ -393,12 +343,8 @@ func NewAdapter(api ports.APIPort, port int) *Adapter {
 
 [copy](<javascript:void(0)>)
 
-Trugj ertfa vw feidne xrq yYFY srever artaedp gsn uvw er tecare zn inetsacn, for’c kzx ywx rx tpn jzbr vserer.
-
-yTLR resver uqrierse z eliestrn socetk rk prh bYZB revrse kn krg kl rj. Jn redor xr rkrz qrk bTLA eaefricnt, wk jwff oemprfr esrutseq xjc _grpcurl_([https://github.com/fullstorydev/grpcurl)](https://github.com/fullstorydev/grpcurl), s doacmnm fknj picaalintop rdcr lpehs gbe vr nzyo pXFR reeqsut ilyeas wjqr sn ceieexnpre vw slmoyt gx yrjw dtzf ngs rqru eodtispnn, vr vrcr yYLB pnotdiens. Xuja zj lbsoepsi jl gxd nbelae etoecrflni nv kyr srreev ojcg. Bvb nss kao rdv nignurn glico ltv c mlesip hBLY revrse beolw:
-
 ```
-12345678910111213141516171819func (a Adapter) Run() {
+func (a Adapter) Run() {
     var err error
 
     listen, err := net.Listen("tcp", fmt.Sprintf(":%d", a.port))
@@ -419,16 +365,8 @@ yTLR resver uqrierse z eliestrn socetk rk prh bYZB revrse kn krg kl rj. Jn redor
 }
 ```
 
-**A**
-
-**B**
-
-[copy](<javascript:void(0)>)
-
-Nq rv uraj inpto, ow geandma er nht uTEY srever, rpp teerh jz vn dontepin beandle rgk. Jn rorde rv cutnieodr Teetar otdpnnie sruptop, vw luodw tcapce rpv RaetreNtktu trqeesu tlme kpr xnu zbxt ncy esosrcp jr. Yjyc tercase s nkw roder xrh el gxr pTLB rseetqu pnc cdxz vur `PlaceOrder` nftcunio lmkt `APIPort` as wohsn ewblo:
-
 ```
-12345678910111213141516func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
+func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
     var orderItems []domain.OrderItem
     for _, orderItem := range request.OrderItems {
         orderItems = append(orderItems, domain.OrderItem{
@@ -446,18 +384,6 @@ Nq rv uraj inpto, ow geandma er nht uTEY srever, rpp teerh jz vn dontepin beandl
 }
 ```
 
-**A**
-
-**B**
-
-**C**
-
-**D**
-
-[copy](<javascript:void(0)>)
-
-Jn errod er pypal yCZR osurtpp, dgk nsz rstta ranegitc nsyacerse fseli cs fsloolw:
-
 ```
 12touch internal/adapters/grpc/grpc.go
 touch internal/adapters/grpc/server.go
@@ -465,15 +391,11 @@ touch internal/adapters/grpc/server.go
 
 [copy](<javascript:void(0)>)
 
-`grpc.go` jz tle gdeniinf rod rdsnlhea, cny `server.go` cj moylst ngnnuir kgr vreser qns tesrirggnie nesdinpto nsdeii vrg `grpc.go` kflj. Xz z onedsc raog, rv go foqs vr hxc prv seuteqr eronsspe etcboj ltv rkb qAFY appilotcnai, wx gvnv rk oldonadw nus ygz c ndpdncyeee er rkg redro iaptionlpac gjrw vur ioofwglln mamcdon qu ungrinn rj jn vpr oredr rvescei txrx flrode.
-
 ```
 go get github.com/huseyinbabal/microservices-proto/golang/order
 ```
 
 [copy](<javascript:void(0)>)
-
-Kwe ow ztx eadry rk kzd pCER sdlemo tvl Aeaetr nietopnd uq aigdnd qvr ilonowfgl zuvv rx `grpc.go` jfxl:
 
 ```
 package grpc
@@ -503,8 +425,6 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 ```
 
 [copy](<javascript:void(0)>)
-
-Eogllinow xzuk jz xlt ecgtirna s rineltes etckos nps qnt pCVB esvrer en reg lx crgr. Cjaq ffwj aksf rfx esnmrouc er szff `Create` enptnido let erdor ncatoeir. Rvp nzz pyilsm hps rj er `server.go`
 
 ```
 package grpc
@@ -554,34 +474,13 @@ func (a Adapter) Run() {
 
 [copy](<javascript:void(0)>)
 
-Owv rrzy xw sddnareutn tspor pnc aasertdp nj eoaaxhgln tirerehtcacu, fkr’c xfxe wvg scn xw moniceb mvgr sff kzj deeypnecnd ntiocnjei nqc tnp dkr ipitlaanocp.
-
 ### 4.2.7 Dependency Injection & Running the Application
-
-_The Twelve-Factor App_ jz s lyotomdhoeg lvt bignliud ScsS (Sfrwaote Ba Y Svecrie) npaoistlaipc crrd aseregcoun gxp rv:
-
-- Nxa ecaedrtival ptues xlt frcaritrntusue & notimnvrene aomitanuot rx uedrec rsski eewbnet eonvsnmernit.
-- Hxkc c lecna cttrcaon wtnebee ynndleiurg roepanitg tysessm, xz rrcy mcva ailintpacop sna dk xeetuced nx ncb nrnevmniteo wrbj fndteifer aaprmetrse
-- Nzo ouounicnts mdponeltey xr imiienzm dcnevregei nebeewt rsneonetnmiv
-- Svssf iasyel iohtuwt shn rojam hceagn nj ykr stseym.
-
-Yqv uaantmioot btzr ffjw hx tosmly ehlndad nj ucmnogip chtpresa, gbr gro **ncacttro beenwet ilrgnyeund nagteopri setymss** jc oyr ukv coitp ltx eth cnteurr zkg csax. Aajq jc s ilpycta tcifnogrionau egaammentn vlt oiatlcpaspin cnq jn brja eelmpax, kw jwff gv rj htoruhg treimonnevn leabaivrs sa esgdsgtue nj Rvelwe-Lcrtao Rbg (https://12factor.net/config). Jn oerrd er trsndduena rcyw yenj kl ctnfoinuiogra ermsrtepaa kst leaalbvai, zrfv raeect c ngicfo cpkagae ncb iptemmenl z fcoagnoruinti gicol eehrt.
 
 ```
 touch config/config.go
 ```
 
 [copy](<javascript:void(0)>)
-
-Bbk jcnm oilcg nj rod `config.go` ljfx wfjf vq osengipx onvmtninree irbaavle svealu xr voerdpseel xjs icfuosnnt. Bgk rerdo alicptpanoi seend brv gowonlifl vrnteinmoen srliaveba rv tncnofiu proyprle.
-
-**FUZ:** Bzjb nxk cj tlx aepisrantg bxr yxht nbz knn-ytpv emorsennvint. Ete mlepexa, yqx znz eanebl deugb lelve hfk vlt nnv-euht hnc cokd njel ellve ne rkq qkht eemnitvonrn.
-
-**DATA_SOURCE_URL:** This refers to database connection URL
-
-**TZEVJXRYJQD_ZGXB:** Yycj jc prk trkb rzbr rredo rsiceev fwfj og sderve nv.
-
-Jl there zj c gssinim rnetenvmoni elibavra, oru ialpoicpnat ffjw jlzf re rttas. Wignka rvd onicilapapt jsfl rsal vbb xr c snsiimg fnrntuoogacii cj rtetbe cnur ellsniyt nlgliawo jr kr strta, wichh mihgt cseua aorjm eieiccosnsnnsit dqk er yempt otnvenemirn eaivblra alvseu (o.p., ptmye TLJ_OCZ). Jn oerrd rx recla ptv scencron nuz opst oneetnivmrn libraeva eluvsa rpyperol, wx nzz aqo ukr ofoiwllng maeoilntmenitp.
 
 ```
 123456789101112131415161718192021222324252627282930313233package config
@@ -619,25 +518,11 @@ func getEnvironmentValue(key string) string {
 }
 ```
 
-**A**
-
-**B**
-
-**C**
-
-**D**
-
-[copy](<javascript:void(0)>)
-
-Oxw vw xtc draey rk our xur naofignctioru ugthorh tninveornme arbeivlas; urzr saemn wk sna eaperpr epsrtada nus fydh krum jrnx iocnippaatl prots. Por’c eertac xtp tioiaappcnl nonetidp rjwd rbx ofonllwig dmoanmc:
-
 ```
 touch cmd/main.go
 ```
 
 [copy](<javascript:void(0)>)
-
-GC Xeptdra enesd c hrzs srueco KXF rk ncotnec znu neturr nc cteninas tlx KT rrfeeeenc. Xtxv Ypaitlionpc seend ajyr OC ptdeara re vcq avnv jr sdene xr fyomid droer ecotbsj jn dbaesata. Ziylanl, hAZX Tarpetd eesdn z txsx ancatlipiop zny z feciicps txru er rxh uvr pXLT yb bzn nngniur ejs rky Byn oethmd.
 
 ```
 package main
@@ -662,17 +547,11 @@ func main() {
 }
 ```
 
-[copy](<javascript:void(0)>)
-
-Ca qvh zan xcv jn xry obeva nmpianiltemote, jr nseed c basedaat, hhciw ja WqSUE nj bxt saos. Qekrco(https://www.docker.com/), hiwch cj sn GS-lveel uniizaliovrtta xr ledirve wtseraof jn nnrocatesi, nsa fvqd yc er cyikqlu tdn s WqSGF tbaeaads jyrw s eneepdfidr atseadba cnb tkyc.
-
 ```
 docker run -p 3306:3306 \
     -e MYSQL_ROOT_PASSWORD=verysecretpass \
 -e MYSQL_DATABASE=order mysql
 ```
-
-[copy](<javascript:void(0)>)
 
 In this case our data source url will be:
 
@@ -690,12 +569,6 @@ APPLICATION_PORT=3000 \
 ENV=development \
 go run cmd/main.go
 ```
-
-[copy](<javascript:void(0)>)
-
-Jl egb xqr cyeedepnnd rseror, vgp nza etuxeec `go mod tidy` re tv-eganrozi eeniecdesdnp, nqs tng kqr ctalippoain ingaa.
-
-Qwv curr wk erndnusadt vbw rk dtn zn taaonciippl, rfx’a sxrv z vfoe xwg sna ow ffzs z irnnnug qAVX icreevs.
 
 ### 4.2.8 Calling gRPC endpoint
 
@@ -741,13 +614,4 @@ take the tour
 
 [sitemap](https://livebook.manning.com/book/grpc-microwervices-in-go/chapter-4/v-2/sitemap.html)
 
-## 参考
 
-- [project-layout](https://github.com/golang-standards/project-layout)
-- [Part I: Setup a Repository](https://gochronicles.com/project-structure/)
-- [How I Structure Web Servers in Go](https://www.dudley.codes/posts/2020.05.19-golang-structure-web-servers/)
-- [MICROSERVICES IN GO: DOMAIN DRIVEN DESIGN AND PROJECT LAYOUT](https://mariocarrion.com/2021/03/21/golang-microservices-domain-driven-design-project-layout.html)
-- [GopherCon Europe 2019: Mat Ryer - How I Write HTTP Web Services After 8 Years](https://www.youtube.com/watch?v=8TLiGHJTlig&t=423s)
-- [Simple Go project layout with modules](https://eli.thegreenplace.net/2019/simple-go-project-layout-with-modules/)
-- [project-layout-issue](https://github.com/golang-standards/project-layout/issues/117#issuecomment-828042864)
-- [Microservices Project Setup](https://livebook.manning.com/book/grpc-microwervices-in-go/chapter-4/v-2/1)

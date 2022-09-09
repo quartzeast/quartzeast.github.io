@@ -5,7 +5,7 @@ draft: false
 author: "Hugo Authors"
 description: "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 tags:
-  - "markdown"
+  - "Go"
 ---
 
 ## 参考
