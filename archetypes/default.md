@@ -1,6 +1,18 @@
 ---
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
-draft: true
+tags:
+  - t
+categories:
+  - c
 ---
 
+p
+
+<!--more-->
+
+c
+
+## 参考资料
+
+1. r
