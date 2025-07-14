@@ -38,11 +38,11 @@ const MobileMenu = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="size-8 sm:hidden"
-          title="Menu"
+          className="-me-2 size-8 sm:hidden"
+          title="菜单"
         >
           <Menu className="size-5" />
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">切换菜单</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background">
@@ -50,7 +50,7 @@ const MobileMenu = () => {
           <DropdownMenuItem key={item.href} asChild>
             <a
               href={item.href}
-              className="w-full text-lg font-medium capitalize"
+              className="w-full font-mono text-lg font-medium capitalize"
               onClick={() => setIsOpen(false)}
             >
               {item.label}

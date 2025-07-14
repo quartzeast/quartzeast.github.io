@@ -1,4 +1,5 @@
 ---
+import Badge from '@/components/Badge.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Link from '@/components/Link.astro'
 import PostHead from '@/components/PostHead.astro'
@@ -7,7 +8,6 @@ import SubpostsHeader from '@/components/SubpostsHeader.astro'
 import SubpostsSidebar from '@/components/SubpostsSidebar.astro'
 import TOCHeader from '@/components/TOCHeader.astro'
 import TOCSidebar from '@/components/TOCSidebar.astro'
-import { badgeVariants } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Layout from '@/layouts/Layout.astro'
 import {
@@ -198,13 +198,9 @@ const tocSections = await getTOCSections(currentPostId)
             post.data.tags &&
               post.data.tags.length > 0 &&
               post.data.tags.map((tag) => (
-                <a
-                  href={`/tags/${tag}`}
-                  class={badgeVariants({ variant: 'secondary' })}
-                >
-                  <Icon name="lucide:hash" class="size-3" />
-                  {tag}
-                </a>
+                <Link href={`/tags/${tag}`}>
+                  <Badge text={tag} />
+                </Link>
               ))
           }
         </div>
@@ -250,8 +246,8 @@ const tocSections = await getTOCSections(currentPostId)
     size="icon"
     className="group fixed right-8 bottom-8 z-50 hidden"
     id="scroll-to-top"
-    title="Scroll to top"
-    aria-label="Scroll to top"
+    title="滚动到顶部"
+    aria-label="滚动到顶部"
   >
     <Icon
       name="lucide:arrow-up"

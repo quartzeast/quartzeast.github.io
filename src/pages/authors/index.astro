@@ -9,8 +9,8 @@ const authors = await getAllAuthors()
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead slot="head" title="Authors" />
-  <Breadcrumbs items={[{ label: 'Authors', icon: 'lucide:users' }]} />
+  <PageHead slot="head" title="作者" />
+  <Breadcrumbs items={[{ label: '作者', icon: 'lucide:users' }]} />
   {
     authors.length > 0 ? (
       <ul class="flex flex-col gap-4">

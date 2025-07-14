@@ -16,12 +16,16 @@ const { class: className } = Astro.props
 ---
 
 <!doctype html>
-<html class="bg-background text-foreground" lang={SITE.locale}>
+<html
+  class="bg-background text-foreground scheme-dark"
+  lang={SITE.locale}
+  data-theme="dark"
+>
   <Head>
     <slot name="head" />
   </Head>
   <body>
-    <div class="flex h-fit min-h-screen flex-col gap-y-6 font-sans">
+    <div class="flex h-fit min-h-screen flex-col gap-y-6 font-mono">
       <div
         class="bg-background/50 sticky top-0 z-50 divide-y backdrop-blur-sm xl:divide-none"
       >

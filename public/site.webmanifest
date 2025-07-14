@@ -1,6 +1,6 @@
 {
-  "name": "astro-erudite",
-  "short_name": "astro-erudite",
+  "name": "quartzeast.github.io",
+  "short_name": "quartzeast.github.io",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -16,6 +16,6 @@
     }
   ],
   "theme_color": "#ffffff",
-  "background_color": "#000000",
+  "background_color": "#ffffff",
   "display": "standalone"
 }

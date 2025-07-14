@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date) {
-  return Intl.DateTimeFormat('en-US', {
+  return Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -23,7 +23,7 @@ export function calculateWordCountFromHtml(
 
 export function readingTime(wordCount: number): string {
   const readingTimeMinutes = Math.max(1, Math.round(wordCount / 200))
-  return `${readingTimeMinutes} min read`
+  return `${readingTimeMinutes} 分钟阅读`
 }
 
 export function getHeadingMargin(depth: number): string {
@@ -34,4 +34,18 @@ export function getHeadingMargin(depth: number): string {
     6: 'ml-16',
   }
   return margins[depth] || ''
+}
+
+export function getElapsedTime(unixTimestamp: number): string {
+  const createdAt = new Date(unixTimestamp)
+  const now = new Date()
+  let difference = now.getTime() - createdAt.getTime()
+  const hours = Math.floor(difference / (1000 * 60 * 60))
+  difference -= hours * (1000 * 60 * 60)
+  const minutes = Math.floor(difference / (1000 * 60))
+  difference -= minutes * (1000 * 60)
+  const seconds = Math.floor(difference / 1000)
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')} 已过去`
 }

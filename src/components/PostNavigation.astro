@@ -18,7 +18,7 @@ const isSubpost = !!parentPost
     href={olderPost ? `/blog/${olderPost.id}#post-title` : '#'}
     class={cn(
       buttonVariants({ variant: 'outline' }),
-      'rounded-lg group flex items-center justify-start size-full',
+      'group flex items-center justify-start size-full',
       !olderPost && 'pointer-events-none opacity-50 cursor-not-allowed',
     )}
     aria-disabled={!olderPost}
@@ -29,12 +29,12 @@ const isSubpost = !!parentPost
     />
     <div class="flex flex-col items-start overflow-hidden text-wrap">
       <span class="text-muted-foreground text-left text-xs">
-        {isSubpost ? 'Previous Subpost' : 'Previous Post'}
+        {isSubpost ? '上一个子文章' : '上一篇文章'}
       </span>
       <span class="w-full text-left text-sm text-balance text-ellipsis">
         {
           olderPost?.data.title ||
-            (isSubpost ? 'No older subpost' : "You're at the oldest post!")
+            (isSubpost ? '没有更旧的子文章！' : '您已经在最早的文章了！')
         }
       </span>
     </div>
@@ -46,7 +46,7 @@ const isSubpost = !!parentPost
         href={parentPost ? `/blog/${parentPost.id}#post-title` : '#'}
         class={cn(
           buttonVariants({ variant: 'outline' }),
-          'group flex size-full items-center justify-center rounded-lg',
+          'group flex size-full items-center justify-center',
           !parentPost && 'pointer-events-none cursor-not-allowed opacity-50',
         )}
       >
@@ -56,10 +56,10 @@ const isSubpost = !!parentPost
         />
         <div class="flex flex-col items-center overflow-hidden text-wrap">
           <span class="text-muted-foreground text-center text-xs">
-            Parent Post
+            父文章
           </span>
           <span class="w-full text-center text-sm text-balance text-ellipsis">
-            {parentPost?.data.title || 'No parent post'}
+            {parentPost?.data.title || 'No parent post!'}
           </span>
         </div>
       </Link>
@@ -70,19 +70,19 @@ const isSubpost = !!parentPost
     href={newerPost ? `/blog/${newerPost.id}#post-title` : '#'}
     class={cn(
       buttonVariants({ variant: 'outline' }),
-      'rounded-lg group flex items-center justify-end size-full',
+      'group flex items-center justify-end size-full',
       !newerPost && 'pointer-events-none opacity-50 cursor-not-allowed',
     )}
     aria-disabled={!newerPost}
   >
     <div class="flex flex-col items-end overflow-hidden text-wrap">
       <span class="text-muted-foreground text-right text-xs">
-        {isSubpost ? 'Next Subpost' : 'Next Post'}
+        {isSubpost ? '下一个子文章' : '下一篇文章'}
       </span>
       <span class="w-full text-right text-sm text-balance text-ellipsis">
         {
           newerPost?.data.title ||
-            (isSubpost ? 'No newer subpost' : "You're at the newest post!")
+            (isSubpost ? '没有更新的子文章！' : '您已经在最新文章了！')
         }
       </span>
     </div>

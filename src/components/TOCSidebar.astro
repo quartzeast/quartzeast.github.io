@@ -26,8 +26,7 @@ const parentId = isCurrentSubpost ? getParentId(currentPostId) : currentPostId
         type="hover"
         data-toc-scroll-area
       >
-        <div class="flex flex-col gap-2 px-4">
-          <span class="text-lg font-medium">Table of Contents</span>
+        <div class="flex flex-col gap-4 px-4">
           {sections.map((section, index) => {
             const isFirstSubpost =
               section.type === 'subpost' &&
@@ -36,7 +35,7 @@ const parentId = isCurrentSubpost ? getParentId(currentPostId) : currentPostId
             return (
               <>
                 {isFirstSubpost && (
-                  <div class="mt-2 flex items-center gap-2">
+                  <div class="flex items-center gap-2">
                     <div class="bg-border h-px flex-1" />
                     <span class="text-muted-foreground text-xs font-medium">
                       Subposts
@@ -75,34 +74,10 @@ const parentId = isCurrentSubpost ? getParentId(currentPostId) : currentPostId
                   <div
                     class={cn(
                       'border p-2',
-                      section.subpostId === currentPostId ? 'bg-muted/50' : '',
+                      section.subpostId === currentPostId ? 'bg-muted' : '',
                     )}
                   >
                     <ul class="flex list-none flex-col gap-y-2">
-                      <li
-                        class={cn(
-                          'text-xs font-medium',
-                          section.subpostId === currentPostId
-                            ? 'text-foreground'
-                            : 'text-foreground/60',
-                        )}
-                      >
-                        <a
-                          href={
-                            section.subpostId === currentPostId
-                              ? '#'
-                              : `/blog/${section.subpostId}`
-                          }
-                          class="marker:text-foreground/30 list-none underline decoration-transparent underline-offset-[3px] transition-colors duration-200 hover:decoration-inherit"
-                          data-heading-link={
-                            section.subpostId === currentPostId
-                              ? 'top'
-                              : `${section.subpostId}-top`
-                          }
-                        >
-                          {section.title}
-                        </a>
-                      </li>
                       {section.headings.map((heading) => (
                         <li
                           class={cn(
@@ -110,7 +85,9 @@ const parentId = isCurrentSubpost ? getParentId(currentPostId) : currentPostId
                             getHeadingMargin(heading.depth),
                             section.subpostId === currentPostId
                               ? 'text-foreground/60'
-                              : 'text-foreground/30',
+                              : heading.isSubpostTitle
+                                ? 'text-foreground/60'
+                                : 'text-foreground/30',
                           )}
                         >
                           <a

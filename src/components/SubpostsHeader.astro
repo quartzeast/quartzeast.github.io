@@ -87,7 +87,7 @@ const currentSubpostDetails = isCurrentSubpost
               {activePost && (
                 <li>
                   {isActivePost ? (
-                    <div class="text-foreground bg-muted mobile-subposts-active-item flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium">
+                    <div class="text-foreground bg-muted mobile-subposts-active-item flex items-center gap-2 px-2 py-1.5 text-sm font-medium">
                       <Icon
                         name="lucide:book-open-text"
                         class="size-4 flex-shrink-0"
@@ -105,7 +105,7 @@ const currentSubpostDetails = isCurrentSubpost
                                 activePostReadingTime && (
                                 <span>
                                   {' '}
-                                  ({activePostCombinedReadingTime} total)
+                                  ({activePostCombinedReadingTime} 总计)
                                 </span>
                               )}
                           </span>
@@ -115,7 +115,7 @@ const currentSubpostDetails = isCurrentSubpost
                   ) : (
                     <a
                       href={`/blog/${activePost.id}`}
-                      class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
+                      class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 px-2 py-1.5 text-sm transition-colors"
                     >
                       <Icon
                         name="lucide:book-open"
@@ -134,7 +134,7 @@ const currentSubpostDetails = isCurrentSubpost
                                 activePostReadingTime && (
                                 <span>
                                   {' '}
-                                  ({activePostCombinedReadingTime} total)
+                                  ({activePostCombinedReadingTime} 总计)
                                 </span>
                               )}
                           </span>
@@ -149,7 +149,7 @@ const currentSubpostDetails = isCurrentSubpost
                 <div class="ml-4 space-y-1">
                   {subpostsWithReadingTime.map((subpost) =>
                     currentPostId === subpost.id ? (
-                      <div class="text-foreground bg-muted mobile-subposts-active-item flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium">
+                      <div class="text-foreground bg-muted mobile-subposts-active-item flex items-center gap-2 px-2 py-1.5 text-sm font-medium">
                         <Icon
                           name="lucide:file-text"
                           class="size-4 flex-shrink-0"
@@ -165,7 +165,7 @@ const currentSubpostDetails = isCurrentSubpost
                     ) : (
                       <a
                         href={`/blog/${subpost.id}`}
-                        class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
+                        class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 px-2 py-1.5 text-sm transition-colors"
                       >
                         <Icon
                           name="lucide:file"

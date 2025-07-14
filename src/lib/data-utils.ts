@@ -21,15 +21,6 @@ export async function getAllPostsAndSubposts(): Promise<
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 }
 
-export async function getAllProjects(): Promise<CollectionEntry<'projects'>[]> {
-  const projects = await getCollection('projects')
-  return projects.sort((a, b) => {
-    const dateA = a.data.startDate?.getTime() || 0
-    const dateB = b.data.startDate?.getTime() || 0
-    return dateB - dateA
-  })
-}
-
 export async function getAllTags(): Promise<Map<string, number>> {
   const posts = await getAllPosts()
   return posts.reduce((acc, post) => {
@@ -273,7 +264,7 @@ export async function getTOCSections(postId: string): Promise<TOCSection[]> {
   if (parentHeadings.length > 0) {
     sections.push({
       type: 'parent',
-      title: 'Overview',
+      title: '概览',
       headings: parentHeadings.map((heading) => ({
         slug: heading.slug,
         text: heading.text,

@@ -16,16 +16,16 @@ const currentPath = Astro.url.pathname
 const isAuthorPage = currentPath === `/authors/${author.id}`
 
 const socialLinks: SocialLink[] = [
-  author.data.website && { href: author.data.website, label: 'Website' },
+  author.data.website && { href: author.data.website, label: '网站' },
   author.data.github && { href: author.data.github, label: 'GitHub' },
   author.data.twitter && { href: author.data.twitter, label: 'Twitter' },
   author.data.linkedin && { href: author.data.linkedin, label: 'LinkedIn' },
-  author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
+  author.data.mail && { href: `mailto:${author.data.mail}`, label: '邮箱' },
 ].filter(Boolean) as SocialLink[]
 ---
 
 <div
-  class="has-[a:hover]:bg-secondary/50 overflow-hidden rounded-xl border p-4 transition-colors duration-300 ease-in-out"
+  class="has-[a:hover]:bg-secondary/50 overflow-hidden border p-4 transition-colors duration-300 ease-in-out"
 >
   <div class="flex flex-wrap gap-4">
     <Link
@@ -38,7 +38,7 @@ const socialLinks: SocialLink[] = [
         alt={`Avatar of ${name}`}
         fallback={name[0]}
         className={cn(
-          'size-32 rounded-md [&>[data-slot="avatar-fallback"]]:rounded-md',
+          'size-32 rounded-none [&>[data-slot="avatar-fallback"]]:rounded-none',
           !isAuthorPage &&
             'hover:ring-primary transition-shadow duration-300 hover:cursor-pointer hover:ring-2',
         )}
