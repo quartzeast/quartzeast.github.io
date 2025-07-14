@@ -13,6 +13,7 @@ import { Icon } from 'astro-icon/components'
 
 const latestPost = await getAllPosts().then((posts) => posts.at(0))
 const latestPosts = await getAllPosts().then((posts) => posts.slice(0, 3))
+const latestPostsMobile = await getAllPosts().then((posts) => posts.slice(0, 2))
 ---
 
 <Layout class="px-2">
@@ -100,44 +101,89 @@ const latestPosts = await getAllPosts().then((posts) => posts.slice(0, 3))
             
             <!-- 文章列表 -->
             <div class="flex-1 space-y-2 overflow-hidden">
-              {latestPosts.map((post) => (
-                <Link
-                  href={`/blog/${post.id}`}
-                  title={`阅读文章: ${post.data.title}`}
-                  aria-label={`阅读文章: ${post.data.title}`}
-                  class="bg-secondary/50 border rounded-lg p-3 transition-all duration-200 block group/post hover:bg-background/85 transition-colors duration-300 ease-in-out"
-                >
-                  <div class="flex flex-col gap-2">
-                    <!-- 文章标题 -->
-                    <h4 class="text-foreground/90 text-sm font-medium leading-tight line-clamp-2 group-hover/post:text-primary transition-colors">
-                      {post.data.title}
-                    </h4>
-                    
-                    <!-- 时间和标签在一起 -->
-                    <div class="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span>
-                        {new Date(post.data.date).toLocaleDateString('zh-CN', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </span>
-                      {post.data.tags && post.data.tags.length > 0 && (
-                        <div class="flex gap-1">
-                          {post.data.tags.slice(0, 2).map((tag) => (
-                            <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs">
-                              {tag}
-                            </span>
-                          ))}
-                          {post.data.tags.length > 2 && (
-                            <span class="text-muted-foreground">+{post.data.tags.length - 2}</span>
-                          )}
-                        </div>
-                      )}
+              {/* 移动端显示2篇文章，桌面端显示3篇 */}
+              <div class="block sm:hidden">
+                {latestPostsMobile.map((post) => (
+                  <Link
+                    href={`/blog/${post.id}`}
+                    title={`阅读文章: ${post.data.title}`}
+                    aria-label={`阅读文章: ${post.data.title}`}
+                    class="bg-secondary/50 border rounded-lg p-3 transition-all duration-200 block group/post hover:bg-background/85 transition-colors duration-300 ease-in-out mb-2"
+                  >
+                    <div class="flex flex-col gap-2">
+                      <!-- 文章标题 -->
+                      <h4 class="text-foreground/90 text-sm font-medium leading-tight line-clamp-2 group-hover/post:text-primary transition-colors">
+                        {post.data.title}
+                      </h4>
+                      
+                      <!-- 时间和标签在一起 -->
+                      <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>
+                          {new Date(post.data.date).toLocaleDateString('zh-CN', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                        {post.data.tags && post.data.tags.length > 0 && (
+                          <div class="flex gap-1">
+                            {post.data.tags.slice(0, 2).map((tag) => (
+                              <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs">
+                                {tag}
+                              </span>
+                            ))}
+                            {post.data.tags.length > 2 && (
+                              <span class="text-muted-foreground">+{post.data.tags.length - 2}</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
+              
+              {/* 桌面端显示3篇文章 */}
+              <div class="hidden sm:block">
+                {latestPosts.map((post) => (
+                  <Link
+                    href={`/blog/${post.id}`}
+                    title={`阅读文章: ${post.data.title}`}
+                    aria-label={`阅读文章: ${post.data.title}`}
+                    class="bg-secondary/50 border rounded-lg p-3 transition-all duration-200 block group/post hover:bg-background/85 transition-colors duration-300 ease-in-out mb-2"
+                  >
+                    <div class="flex flex-col gap-2">
+                      <!-- 文章标题 -->
+                      <h4 class="text-foreground/90 text-sm font-medium leading-tight line-clamp-2 group-hover/post:text-primary transition-colors">
+                        {post.data.title}
+                      </h4>
+                      
+                      <!-- 时间和标签在一起 -->
+                      <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>
+                          {new Date(post.data.date).toLocaleDateString('zh-CN', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                        {post.data.tags && post.data.tags.length > 0 && (
+                          <div class="flex gap-1">
+                            {post.data.tags.slice(0, 2).map((tag) => (
+                              <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs">
+                                {tag}
+                              </span>
+                            ))}
+                            {post.data.tags.length > 2 && (
+                              <span class="text-muted-foreground">+{post.data.tags.length - 2}</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
           
