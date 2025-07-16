@@ -3,8 +3,10 @@ import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-s
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 export default defineEcConfig({
-  themes: ['vitesse-dark', 'vitesse-dark'],
+  themes: ['vitesse-light', 'vitesse-dark'],
   plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
+  useDarkModeMediaQuery: false,
+  themeCssSelector: (theme) => `[data-theme="${theme.name.split('-')[1]}"]`,
   defaultProps: {
     wrap: true,
     collapseStyle: 'collapsible-auto',
@@ -16,7 +18,7 @@ export default defineEcConfig({
     },
   },
   frames: {
-    showCopyToClipboardButton: false,
+    showCopyToClipboardButton: true,
   },
   styleOverrides: {
     borderColor: 'var(--border)',

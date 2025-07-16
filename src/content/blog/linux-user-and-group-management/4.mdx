@@ -1,0 +1,307 @@
+---
+title: '第四部分：实战实验'
+description: '通过综合性实验场景，提升 Linux 用户与组管理的实际操作能力'
+date: 2025-07-15
+tags: ['Linux', '用户管理', '组管理']
+order: 4
+authors: ['rocky']
+draft: false
+---
+
+本部分将设计几个综合性实验场景，旨在引导读者将前文所学知识融会贯通，提升实际操作能力。每个实验都将结合用户与组管理、权限控制和安全审计的多个方面。
+
+## 实验一：搭建一个安全的多用户开发环境
+
+**目标**：创建一个供多个开发者协作的安全项目环境，确保权限隔离和数据安全。
+
+**要求**：
+
+1. 创建一个名为 `devgroup` 的开发组。
+2. 创建两个新用户 `devuser1` 和 `devuser2`，并将其主组设置为 `devgroup`。
+3. 为新用户设置家目录模板，确保其家目录自动包含 `.rc` 和 `.vimrc` 等常用配置文件。
+4. 创建一个名为 `/srv/project_alpha` 的项目目录，并将其所有者设置为 `root`，组所有者设置为 `devgroup`，权限设置为 `rwxrws---` (770 + SGID)。
+5. 配置 `/srv/project_alpha` 目录的默认 ACL，确保 `devgroup` 成员在该目录下创建的新文件和子目录自动继承 `rwx` 权限。
+6. 使用 ACLs 为特定用户 `auditor` 授予对 `/srv/project_alpha` 目录的只读权限，即使 `auditor` 不属于 `devgroup`。
+
+**实验步骤概览**：
+
+1. **创建组和用户**：
+
+   - 使用 `groupadd` 创建 `devgroup`。
+   - 使用 `useradd` 创建 `devuser1` 和 `devuser2`，并指定其主组为 `devgroup`，同时创建家目录。
+   - 使用 `usermod` 将 `devuser1` 和 `devuser2` 添加到 `devgroup` 的附加组中（如果需要）。
+   - 使用 `useradd` 创建 `auditor` 用户。
+
+   ```
+   sudo groupadd devgroup
+   sudo useradd -m -g devgroup devuser1
+   sudo useradd -m -g devgroup devuser2
+   sudo useradd -m auditor
+   ```
+
+2. **设置家目录模板**：
+
+   - 将常用配置文件（如 `.rc`、`.vimrc`）复制到 `/etc/skel` 目录。
+   - （如果用户已创建，则需要手动复制或在 `useradd` 时指定 `-k` 选项）。
+
+   ```
+   # 示例：将自定义 rc 复制到 skel 目录
+   sudo cp ~/.rc /etc/skel/
+   # 确保新用户创建时会复制这些文件
+   ```
+
+3. **创建项目目录并设置基本权限**：
+
+   - 创建 `/srv/project_alpha` 目录。
+   - 使用 `chown` 设置目录所有者和组所有者。
+   - 使用 `chmod` 设置目录权限，包括 SGID，确保新文件继承组所有权。
+
+   ```
+   sudo mkdir /srv/project_alpha
+   sudo chown root:devgroup /srv/project_alpha
+   sudo chmod 2770 /srv/project_alpha # rwxrws---，设置 SGID
+   ```
+
+4. **配置默认 ACL**：
+
+   - 使用 `setfacl` 为 `/srv/project_alpha` 设置默认 ACL，确保 `devgroup` 成员创建的新文件自动继承权限。
+
+   ```
+   sudo setfacl -m d:g:devgroup:rwx /srv/project_alpha
+   ```
+
+5. **为特定用户授予 ACL 权限**：
+
+   - 使用 `setfacl` 为 `auditor` 用户授予只读权限。
+
+   ```
+   sudo setfacl -m u:auditor:r-x /srv/project_alpha
+   ```
+
+6. **验证**：
+
+   - 切换到 `devuser1`，在 `/srv/project_alpha` 中创建文件，验证其组所有权和权限。
+   - 切换到 `auditor`，尝试读取 `/srv/project_alpha` 中的文件，并尝试写入，验证只读权限。
+   - 使用 `getfacl /srv/project_alpha` 和 `ls -l /srv/project_alpha` 检查权限设置。
+
+## 实验二：配置精细化的 sudo 规则
+
+**目标**：创建一个初级管理员角色，只允许其执行特定敏感操作，并禁止访问敏感文件。
+
+**要求**：
+
+1. 创建一个名为 `junior_admin` 的用户。
+
+2. 配置 `sudo` 规则，只允许 `junior_admin` 用户：
+
+   - 重启 Apache 服务 (`systemctl restart apache2`)。
+   - 查看 `/var/log/nginx/access.log` 文件内容。
+   - 管理 `/opt/application_data` 目录下的文件（读、写、删除）。
+
+3. 禁止 `junior_admin` 用户访问 `/etc/shadow` 文件。
+
+4. 配置 `junior_admin` 执行上述操作时无需密码。
+
+
+
+**实验步骤概览**：
+
+1. **创建用户**：
+
+   - 创建 `junior_admin` 用户。
+
+   ```Bash
+   sudo useradd -m junior_admin
+   sudo passwd junior_admin
+   ```
+
+
+
+2. **创建相关目录和文件（如果不存在）**：
+
+   - 创建 `/opt/application_data` 目录。
+   - 确保 `/var/log/nginx/access.log` 存在（可能需要安装 Nginx）。
+
+   ```Bash
+   sudo mkdir -p /opt/application_data
+   sudo touch /var/log/nginx/access.log
+   ```
+
+3.  **配置 `sudo` 规则**：
+
+      - 使用 `visudo` 编辑 `/etc/sudoers` 或在 `/etc/sudoers.d/` 下创建新文件（推荐）。
+      - 定义命令别名，实现最小权限原则。
+
+    ```
+    # 在 /etc/sudoers.d/junior_admin 文件中添加以下内容
+    # sudo visudo -f /etc/sudoers.d/junior_admin
+
+    # 定义允许 junior_admin 执行的服务重启命令
+    Cmnd_Alias APACHE_RESTART = /usr/bin/systemctl restart apache2
+
+    # 定义允许 junior_admin 查看的日志文件命令
+    Cmnd_Alias NGINX_LOG_VIEW = /usr/bin/cat /var/log/nginx/access.log, \
+                                /usr/bin/less /var/log/nginx/access.log, \
+                                /usr/bin/tail -f /var/log/nginx/access.log
+
+    # 定义允许 junior_admin 管理 /opt/application_data 目录的命令
+    # 注意：为了安全，通常不直接允许 rm -rf *，这里仅为实验目的
+    Cmnd_Alias APP_DATA_MGMT = /usr/bin/ls /opt/application_data, \
+                               /usr/bin/mkdir /opt/application_data/*, \
+                               /usr/bin/rm /opt/application_data/*, \
+                               /usr/bin/cp /opt/application_data/* /opt/application_data/*, \
+                               /usr/bin/mv /opt/application_data/* /opt/application_data/*, \
+                               /usr/bin/chmod * /opt/application_data/*, \
+                               /usr/bin/chown * /opt/application_data/*, \
+                               /usr/bin/chgrp * /opt/application_data/*
+
+    # 定义禁止 junior_admin 访问 /etc/shadow 的规则
+    # 注意：ALL !/usr/bin/cat /etc/shadow 是禁止特定命令，更安全的方式是限制其可执行的命令列表
+    # 如果 junior_admin 能够执行任意命令，则无法有效禁止
+    # 此处通过限制允许执行的命令来间接禁止访问敏感文件
+
+    # 为 junior_admin 用户配置 sudo 权限，并设置 NOPASSWD
+    junior_admin ALL=(ALL) NOPASSWD: APACHE_RESTART, NGINX_LOG_VIEW, APP_DATA_MGMT
+    ```
+
+4.  **验证 `sudo` 规则**：
+
+      - 切换到 `junior_admin` 用户。
+      - 尝试执行允许的操作：重启 Apache、查看 Nginx 日志、管理 `/opt/application_data` 目录。
+      - 尝试执行被禁止的操作：访问 `/etc/shadow` 或执行其他系统命令。
+
+    ```bash
+    # 切换到 junior_admin 用户
+    su - junior_admin
+
+    # 尝试允许的操作
+    sudo systemctl restart apache2
+    sudo cat /var/log/nginx/access.log
+    sudo ls /opt/application_data
+    sudo touch /opt/application_data/test_file.txt
+    sudo rm /opt/application_data/test_file.txt
+
+    # 尝试禁止的操作
+    sudo cat /etc/shadow
+    sudo reboot
+    ```
+
+    **预期结果**：允许的操作将成功执行且无需密码，禁止的操作将被拒绝并记录到日志中。
+
+## 实验三：账户安全事件响应模拟
+
+**目标**：模拟一个用户密码泄露事件，演示如何快速锁定账户、强制修改密码、并审计该用户的历史活动。
+
+**要求**：
+
+1.  创建一个名为 `compromised_user` 的模拟受损账户。
+2.  模拟 `compromised_user` 的密码泄露。
+3.  快速锁定 `compromised_user` 账户，阻止其登录。
+4.  强制 `compromised_user` 在下次登录时修改密码。
+5.  审计 `compromised_user` 的历史登录记录。
+6.  审计 `compromised_user` 在系统上执行的命令（如果 `auditd` 已配置）。
+
+**实验步骤概览**：
+
+1.  **创建模拟受损账户**：
+
+      - 创建 `compromised_user` 并设置初始密码。
+
+    ```bash
+    sudo useradd -m compromised_user
+    sudo passwd compromised_user
+    # 假设密码为 'password123'
+    ```
+
+2.  **模拟密码泄露及恶意登录**：
+
+      - 可以在另一终端或虚拟机中尝试使用 `compromised_user` 登录，模拟攻击者已获取密码。
+
+    ```bash
+    # 在另一终端尝试登录
+    ssh compromised_user@localhost # 或直接 su - compromised_user
+    ```
+
+3.  **快速锁定账户**：
+
+      - 使用 `passwd -l` 或 `usermod -L` 锁定账户。
+      - 或者更彻底地修改其 shell 为 `/sbin/nologin`。
+
+    ```bash
+    # 锁定密码
+    sudo passwd -l compromised_user
+    # 或者禁用账户
+    # sudo usermod -L compromised_user
+
+    # 更彻底地阻止登录（如果已登录的会话不会立即终止）
+    sudo usermod -s /sbin/nologin compromised_user
+    ```
+
+4.  **强制用户下次登录时修改密码**：
+
+      - 使用 `chage -d 0` 或 `passwd -e` 命令。
+
+    ```bash
+    # 强制用户下次登录时修改密码
+    sudo chage -d 0 compromised_user
+    # 或者
+    # sudo passwd -e compromised_user
+    ```
+
+5.  **审计用户历史登录记录**：
+
+      - 使用 `last` 和 `lastb` 命令查看登录和失败登录尝试。
+
+    ```bash
+    # 查看所有用户的登录记录
+    last
+    # 查看特定用户的登录记录
+    last compromised_user
+    # 查看失败的登录尝试
+    lastb
+    ```
+
+6.  **审计用户执行的命令（需要 `auditd` 或历史命令记录）**：
+
+      - **Bash 历史记录**：查看用户的 `.bash_history` 文件。
+
+    ```bash
+    # 查看用户的 Bash 历史记录
+    sudo cat /home/compromised_user/.bash_history
+    ```
+
+      - **使用 `auditd` (如果已配置)**：如果 `auditd` 守护进程正在运行并配置了相应的规则，可以查询其日志来获取更详细的用户活动信息。
+
+    ```bash
+    # 假设你已经配置了 auditd 规则来监控 execve 系统调用
+    # 例如，在 /etc/audit/rules.d/audit.rules 中添加：
+    # -a always,exit -F arch=b64 -S execve -F euid=compromised_user -k user_commands
+    # 然后重启 auditd: sudo systemctl restart auditd
+
+    # 查询 auditd 日志
+    sudo ausearch -ua compromised_user
+    sudo ausearch -k user_commands
+    ```
+
+7.  **解除账户锁定并设置新密码**：
+
+      - 在完成审计和安全评估后，可以解锁账户并设置一个新密码。
+
+    ```bash
+    # 解锁密码
+    sudo passwd -u compromised_user
+    # 重置一个强密码
+    sudo passwd compromised_user
+    # 恢复其原始 shell (如果之前改动过)
+    # sudo usermod -s /bin/bash compromised_user
+    ```
+
+# 结论
+
+本系列文章从 Linux 用户与组管理的核心哲学出发，详尽解析了 UID、GID、文件结构等基础概念，并深入探讨了 `useradd`、`groupadd` 等基础命令的深层机制与常用参数。我们随后进阶到高级权限管理，对传统的文件系统权限（`chmod`、`chown`）进行了精细化解读，并重点介绍了 ACLs 如何提供更细粒度的访问控制，以及 SUID、SGID 和 Sticky Bit 等特殊权限位的安全考量与应用。
+
+在安全加固方面，我们强调了健壮的密码策略、账户锁定以及限制用户登录的重要性，并探讨了如何利用 `chage` 等工具强化账户安全。文章还详细阐述了 `sudo` 配置的最佳实践，包括其语法、`visudo` 的使用以及如何基于最小权限原则构建安全策略。
+
+最后，我们深入研究了用户活动审计，从 `last`、`journalctl` 等基本工具到 `auditd` 框架，展示了如何有效地监控和追踪用户行为，为安全事件响应提供关键线索。通过三个实战实验，我们不仅巩固了理论知识，更提升了读者在多用户开发环境搭建、精细化 `sudo` 授权以及账户安全事件响应方面的实践能力。
+
+Linux 用户与组管理是系统安全和稳定运行的基石。随着云计算和容器技术的普及，传统的身份验证和授权机制正在与更复杂的身份管理系统（如 LDAP、Kerberos、FreeIPA）集成，以实现集中式身份认证和更强的安全策略。未来的趋势将是更加自动化、策略驱动和与外部身份提供者无缝集成的用户管理解决方案。然而，无论技术如何演进，对底层用户与组管理原理的深刻理解，始终是每一位 Linux 系统管理员和架构师不可或缺的核心技能。掌握了这些知识，您将能够构建更安全、更健壮、更易于管理的 Linux 系统环境。

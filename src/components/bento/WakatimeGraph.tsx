@@ -9,7 +9,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getLanguageIcon } from '@/components/bento/LanguageIcons'
+import { getLanguageIcon, languageIcons } from '@/components/bento/LanguageIcons'
 
 interface Language {
   name: string
@@ -32,7 +32,7 @@ const CHART_COLORS = [
 ] as const
 
 const WAKATIME_API_URL =
-  'https://wakatime.com/share/@rocky/884c4347-89db-4326-a729-da9437e4d8e9.json'
+  'https://wakatime.com/share/@rocky/a1cfdc2c-bc31-4efd-a220-7230d6d10be4.json'
 const MAX_LANGUAGES = 7
 const ICON_SIZE = 20
 const CIRCLE_RADIUS = 16
@@ -132,10 +132,14 @@ const useWakatimeData = (omitLanguages: string[]) => {
           .filter(
             (lang: { name: string }) => !omitLanguages.includes(lang.name),
           )
+          .filter(
+            (lang: { name: string }) => 
+              Object.keys(languageIcons).includes(lang.name.toLowerCase())
+          )
           .slice(0, MAX_LANGUAGES)
-          .map((lang: { name: string; hours: number }, index: number) => ({
+          .map((lang: { name: string; percent: number }, index: number) => ({
             name: lang.name,
-            hours: Number(lang.hours.toFixed(2)),
+            hours: Number(lang.percent.toFixed(2)),
             fill: CHART_COLORS[index % CHART_COLORS.length],
           }))
 

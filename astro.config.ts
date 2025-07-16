@@ -50,7 +50,10 @@ export default defineConfig({
       [
         rehypePrettyCode,
         {
-          theme: 'vitesse-dark',
+          theme: {
+            light: 'vitesse-light',
+            dark: 'vitesse-dark',
+          },
         },
       ],
     ],

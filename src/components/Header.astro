@@ -1,5 +1,6 @@
 ---
 import Link from '@/components/Link.astro'
+import ThemeToggle from '@/components/ThemeToggle.astro'
 import { NAV_LINKS } from '@/consts'
 import { Image } from 'astro:assets'
 import logo from '../../public/static/logo.svg'
@@ -25,6 +26,7 @@ import logo from '../../public/static/logo.svg'
           ))
         }
       </nav>
+      <ThemeToggle transition:persist />
     </div>
   </div>
 </header>
