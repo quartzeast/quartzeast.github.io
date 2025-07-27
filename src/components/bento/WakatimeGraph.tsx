@@ -137,9 +137,9 @@ const useWakatimeData = (omitLanguages: string[]) => {
               Object.keys(languageIcons).includes(lang.name.toLowerCase())
           )
           .slice(0, MAX_LANGUAGES)
-          .map((lang: { name: string; percent: number }, index: number) => ({
+          .map((lang: { name: string; hours: number }, index: number) => ({
             name: lang.name,
-            hours: Number(lang.percent.toFixed(2)),
+            hours: Number(lang.hours.toFixed(2)),
             fill: CHART_COLORS[index % CHART_COLORS.length],
           }))
 

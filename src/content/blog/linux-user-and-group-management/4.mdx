@@ -110,7 +110,7 @@ draft: false
 
    - 创建 `junior_admin` 用户。
 
-   ```Bash
+   ```bash
    sudo useradd -m junior_admin
    sudo passwd junior_admin
    ```
@@ -122,7 +122,7 @@ draft: false
    - 创建 `/opt/application_data` 目录。
    - 确保 `/var/log/nginx/access.log` 存在（可能需要安装 Nginx）。
 
-   ```Bash
+   ```bash
    sudo mkdir -p /opt/application_data
    sudo touch /var/log/nginx/access.log
    ```
@@ -263,10 +263,10 @@ draft: false
 
 6.  **审计用户执行的命令（需要 `auditd` 或历史命令记录）**：
 
-      - **Bash 历史记录**：查看用户的 `.bash_history` 文件。
+      - **bash 历史记录**：查看用户的 `.bash_history` 文件。
 
     ```bash
-    # 查看用户的 Bash 历史记录
+    # 查看用户的 bash 历史记录
     sudo cat /home/compromised_user/.bash_history
     ```
 
