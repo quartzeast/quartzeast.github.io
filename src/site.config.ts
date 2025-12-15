@@ -3,7 +3,7 @@ import type { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
 	// Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
-	author: "Chris Williams",
+	author: "Rockmancactus",
 	// Date.prototype.toLocaleDateString() parameters, found in src/utils/date.ts.
 	date: {
 		locale: "en-GB",
@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	// Used as the default description meta property and webmanifest description
-	description: "An opinionated starter theme for Astro",
+	description: "rockman's blog about life, coding and cacti.",
 	// HTML lang property, found in src/layouts/Base.astro L:18 & astro.config.ts L:48
 	lang: "en-GB",
 	// Meta property, found in src/components/BaseHead.astro L:42
@@ -25,9 +25,9 @@ export const siteConfig: SiteConfig = {
 		- The link value found in src/components/layout/Header.astro L:35
 		- In the footer found in src/components/layout/Footer.astro L:12
 	*/
-	title: "Astro Cactus",
+	title: "Rockman Cactus",
 	// ! Please remember to replace the following site property with your own domain, used in astro.config.ts
-	url: "https://astro-cactus.chriswilliams.dev/",
+	url: "https://quartzeast.github.io//",
 };
 
 // Used to generate links in both the Header & Footer.
