@@ -1,0 +1,12 @@
+{
+  "baseFontSize": 14,
+  "cssTheme": "Catppuccin",
+  "translucency": false,
+  "monospaceFontFamily": "Zenbones Brainy",
+  "theme": "moonstone",
+  "enabledCssSnippets": [
+    "beautify"
+  ],
+  "interfaceFontFamily": "",
+  "textFontFamily": ""
+}

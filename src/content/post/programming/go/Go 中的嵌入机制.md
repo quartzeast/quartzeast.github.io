@@ -1,8 +1,9 @@
 ---
-title: 'Go 中的嵌入'
-description: 'Go 语言中的嵌入：组合优于继承的实践与示例'
-publishDate: "27 June 2024"
-tags: ['Go']
+title: Go 中的嵌入机制
+description: Go 语言中的嵌入：组合优于继承的实践与示例
+publishDate: 27 June 2024
+tags:
+  - Go
 ---
 
 Go 语言并不支持传统意义上的继承，相反，它提倡使用组合 (composition) 作为扩展类型功能的方式。这并不是 Go 独有的理念，组合优于继承 (Composition over inheritance) 是面向对象编程中的一个著名原则，在《设计模式》(Design Patterns) 这本书的第一章就有详细论述。
@@ -120,7 +121,7 @@ fmt.Println(co.DescribeTag()) // 取的是 Container 的 DescribeTag，并在方
 
 输出结果为：
 
-```
+```go
 Base tag is b's tag
 Container tag is co's tag
 ```
@@ -283,7 +284,7 @@ type C interface {
 }
 ```
 
-从逻辑上讲，这不应该改变 D 的方法集。然而在 Go 1.14 之前，这种情况会导致 "Duplicate method Amethod" 错误，因为 Amethod() 会被声明两次 —— 一次来自 B 的嵌入，另一次来自 C 的嵌入。
+从逻辑上讲，这不应该改变 D 的方法集。然而在 Go 1.14 之前，这种情况会导致 "Duplicate method Amethod" 错误，因为 Amethod() 会被声明两次——一次来自 B 的嵌入，另一次来自 C 的嵌入。
 
 Go 1.14 修复了这个问题。现在这个例子可以正常工作，完全符合预期。D 的方法集就是它所嵌入的接口的方法集与其自身方法的并集。
 
@@ -608,7 +609,7 @@ func (f *File) ReadFrom(r io.Reader) (n int64, err error) {
 
 它首先尝试使用 readFrom 方法从 r 中读取数据，这个方法是针对特定操作系统的。例如在 Linux 系统上，它会使用 copy_file_range 系统调用在内核中直接进行两个文件之间的快速复制。
 
-readFrom 会返回一个布尔值来表示操作是否成功（handled）。如果不成功，ReadFrom 会尝试使用 genericReadFrom 进行"通用"操作，其实现如下：
+readFrom 会返回一个布尔值来表示操作是否成功（handled）。如果不成功，ReadFrom 会尝试使用 genericReadFrom 进行 " 通用 " 操作，其实现如下：
 
 ```go
 func genericReadFrom(f *File, r io.Reader) (int64, error) {

@@ -1,0 +1,54 @@
+/* Base64 to PNG Plugin Styles */
+
+.base64-to-png-settings {
+  margin-top: 10px;
+}
+
+.base64-to-png-modal {
+  padding: 20px;
+}
+
+.base64-to-png-modal-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.base64-to-png-modal-content {
+  margin-bottom: 20px;
+}
+
+.base64-to-png-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.base64-to-png-modal-buttons button {
+  margin-left: 10px;
+}
+
+/* Sponsor section styles */
+.sponsor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.sponsor-text {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.sponsor-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sponsor-image {
+  height: 38px;
+  width: auto;
+  max-width: 160px;
+}

@@ -1,8 +1,9 @@
 ---
-title: '在 Go 语言中掌握 SOLID 原则'
-description: '在 Go 语言中应用 SOLID 原则来提升代码质量和可维护性。'
-publishDate: "30 January 2024"
-tags: ['Go']
+title: 使用 Go 掌握 SOLID 原则
+description: 在 Go 语言中应用 SOLID 原则来提升代码质量和可维护性。
+publishDate: 30 January 2024
+tags:
+  - Go
 ---
 
 软件开发是一个不断变化的挑战。为了驾驭这种复杂性，开发者们依靠经过验证的设计原则来构建健壮、灵活且易于管理的代码。其中一套重要的原则就是 **SOLID** (由 Robert C. Martin 首次提出)。
@@ -15,7 +16,7 @@ SOLID 是以下五个原则的缩写：单一职责 (Single Responsibility)、�
 
 单一职责原则 (SRP) 要求一个结构体或包应该专注于单一且明确的功能领域。我们可以把每个结构体想象成一个专业领域的专家。这样的设计让代码结构清晰，降低复杂度。当需要修改结构体的功能时，变更会被限制在局部范围内，使得维护和未来更新变得轻松自如。
 
-「一个类应该有且仅有一个引起它变化的原因」—— Robert C. Martin
+「一个类应该有且仅有一个引起它变化的原因」——Robert C. Martin
 
 Go 语言以结构体而非类为主。但别担心，单一职责原则在这里同样适用。我们可以将每个结构体视为一个紧密组织的模块，负责一项明确定义的任务。这种模块化方法使代码保持整洁，降低复杂度，提高可维护性。
 
@@ -99,7 +100,7 @@ func SaveSurvey(survey *Survey, repo Repository) error {
 
 开闭原则 (OCP) 是良好软件设计的基石。它要求软件实体（类、模块、函数等）在设计时就要考虑到未来的成长性。这意味着它们应该对扩展开放，允许添加新的特性和功能，同时对修改关闭。为了适应新需求而修改现有代码是有风险的，因为这可能会引入 bug 并使未来的维护变得困难。
 
-「模块应该对扩展开放，但对修改关闭」—— Robert C. Martin
+「模块应该对扩展开放，但对修改关闭」——Robert C. Martin
 
 让我们回到 Survey 的例子。我们来为结构体添加一个新方法 - Export()，用于将调查问卷数据导出到某个外部服务或存储中。由于可能存在多个导出目标，Export() 方法包含了一个 switch 代码块。
 
@@ -156,9 +157,9 @@ func ExportSurvey(s *Survey, exporter Exporter) error {
 
 ## L - 里氏替换原则（Liskov Substitution Principle）
 
-里氏替换原则 (Liskov Substitution Principle, LSP) 确保对象可以在不破坏程序的情况下进行替换。虽然 Go 语言没有传统的继承机制，但通过接口可以实现这一原则。任何类型只要实现了与接口签名匹配的方法，就可以「实现」该接口。这种设计提高了代码的灵活性 —— 只要类型满足接口契约（contract），使用该接口的代码就可以与各种不同的类型协同工作。
+里氏替换原则 (Liskov Substitution Principle, LSP) 确保对象可以在不破坏程序的情况下进行替换。虽然 Go 语言没有传统的继承机制，但通过接口可以实现这一原则。任何类型只要实现了与接口签名匹配的方法，就可以「实现」该接口。这种设计提高了代码的灵活性——只要类型满足接口契约（contract），使用该接口的代码就可以与各种不同的类型协同工作。
 
-「如果 S 是 T 的子类型，那么在不破坏程序正确性的前提下，T 类型的对象可以被 S 类型的对象所替换」—— B. Liskov
+「如果 S 是 T 的子类型，那么在不破坏程序正确性的前提下，T 类型的对象可以被 S 类型的对象所替换」——B. Liskov
 
 在 Go 语言中，io.Writer 接口是一个很好的 LSP 示例。
 
@@ -199,7 +200,7 @@ WriteSurvey(&Survey, file)
 
 接口隔离原则 (Interface Segregation Principle, ISP) 规定使用者（clients）不应该被迫依赖它们不使用的接口。这一原则鼓励创建更小、更专注的接口，而不是大而全的单体接口。
 
-「使用者不应该被迫依赖它们不使用的方法」—— Robert C. Martin
+「使用者不应该被迫依赖它们不使用的方法」——Robert C. Martin
 
 以 Go 的 io 包为例，它提供了多个小型接口及其组合，比如 io.Reader、io.ReadWriter、io.ReadCloser、io.ReadWriteCloser 等。
 
@@ -277,7 +278,7 @@ func (q *DropdownQuestion) AddOption(option string) {
 
 用更简单的话说，DIP 建议我们的代码应该依赖于接口或抽象类，而不是具体的类或函数。这种控制的反转降低了软件不同部分之间的耦合度，使其更加模块化、易于扩展和测试。
 
-「抽象不应该依赖于细节，细节应该依赖于抽象」—— Robert C. Martin
+「抽象不应该依赖于细节，细节应该依赖于抽象」——Robert C. Martin
 
 让我们以 SurveyManager 结构体为例，它负责处理调查问卷的创建，显然它需要依赖数据库。
 
