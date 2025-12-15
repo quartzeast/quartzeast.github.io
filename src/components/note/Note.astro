@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from "astro:content";
 import type { HTMLTag, Polymorphic } from "astro/types";
 import FormattedDate from "@/components/FormattedDate.astro";
+import { withBase } from "@/utils/path";
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	note: CollectionEntry<"note">;
@@ -16,10 +17,10 @@ const { Content } = await render(note);
 	class:list={[isPreview && "bg-global-text/5 inline-grid rounded-md px-4 py-3"]}
 	data-pagefind-body={isPreview ? false : true}
 >
-	<Tag class="title" class:list={{ "text-base": isPreview }}>
+	<Tag class='title' class:list={{ "text-base": isPreview }}>
 		{
 			isPreview ? (
-				<a class="cactus-link" href={`/notes/${note.id}/`}>
+				<a class='cactus-link' href={withBase(`/notes/${note.id}/`)}>
 					{note.data.title}
 				</a>
 			) : (
@@ -38,7 +39,7 @@ const { Content } = await render(note);
 		date={note.data.publishDate}
 	/>
 	<div
-		class="prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0"
+		class='prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0'
 		class:list={{ "line-clamp-6": isPreview }}
 	>
 		<Content />
