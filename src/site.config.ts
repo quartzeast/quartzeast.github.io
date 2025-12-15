@@ -1,9 +1,14 @@
 import type { AstroExpressiveCodeOptions } from "astro-expressive-code";
 import type { SiteConfig } from "@/types";
 
+// Base path for the site (should match astro.config.ts base setting)
+const BASE = "/rockman-cactus";
+
 export const siteConfig: SiteConfig = {
 	// Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
 	author: "Rockmancactus",
+	// Base path - update here to reflect astro.config.ts base setting
+	base: BASE,
 	// Date.prototype.toLocaleDateString() parameters, found in src/utils/date.ts.
 	date: {
 		locale: "en-GB",
@@ -27,10 +32,10 @@ export const siteConfig: SiteConfig = {
 	*/
 	title: "Rockman Cactus",
 	// ! Please remember to replace the following site property with your own domain, used in astro.config.ts
-	url: "https://quartzeast.github.io//",
+	url: "https://quartzeast.github.io/",
 };
 
-// Used to generate links in both the Header & Footer.
+// Used to generate links in both the Header & Footer (before base is applied).
 export const menuLinks: { path: string; title: string }[] = [
 	{
 		path: "/",
