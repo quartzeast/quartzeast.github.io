@@ -10,5 +10,6 @@
     "margin": "0",
     "downscalePercent": 100
   },
-  "spellcheck": true
+  "spellcheck": true,
+  "alwaysUpdateLinks": true
 }

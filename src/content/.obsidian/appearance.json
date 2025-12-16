@@ -1,6 +1,6 @@
 {
-  "baseFontSize": 14,
-  "cssTheme": "Catppuccin",
+  "baseFontSize": 16,
+  "cssTheme": "Obsidianotion",
   "translucency": false,
   "monospaceFontFamily": "Zenbones Brainy",
   "theme": "moonstone",
@@ -8,5 +8,6 @@
     "beautify"
   ],
   "interfaceFontFamily": "",
-  "textFontFamily": ""
+  "textFontFamily": "",
+  "baseFontSizeAction": true
 }

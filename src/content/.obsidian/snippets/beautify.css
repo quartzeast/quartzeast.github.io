@@ -1,14 +1,26 @@
-div[data-path*='attachments'], div[data-path*='attachments'] + div.nav-folder-children 
-{
-    display: none;
+div[data-path*="assets"],
+div[data-path*="assets"] + div.nav-folder-children {
+	display: none;
 }
 
 .external-link {
-  background-image: none;
-  padding-right: 0px;
+	background-image: none;
+	padding-right: 0px;
 }
 
 /* Don't wrap codeblocks */
-pre > code, code[class*="language-"] {
-    white-space: pre !important;
+pre > code,
+code[class*="language-"] {
+	white-space: pre !important;
+}
+
+svg[id^="m"][width][height][viewBox] {
+	min-width: 350px;
+	max-width: 800px;
+	width: 50%;
+	height: auto;
+}
+
+div.mermaid {
+	text-align: center;
 }

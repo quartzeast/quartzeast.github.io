@@ -1,8 +1,6 @@
 [
   "obsidian-excalidraw-plugin",
-  "obsidian-icon-folder",
   "oz-clear-unused-images",
-  "autocorrect-formatter",
   "obsidian-linter",
   "convert-base64-to-png"
 ]
