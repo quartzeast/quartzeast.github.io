@@ -3,7 +3,7 @@ title: 使用 Go 掌握 SOLID 原则
 description: 在 Go 语言中应用 SOLID 原则来提升代码质量和可维护性。
 publishDate: 30 January 2024
 tags:
-  - Go
+  - go
 ---
 
 软件开发是一个不断变化的挑战。为了驾驭这种复杂性，开发者们依靠经过验证的设计原则来构建健壮、灵活且易于管理的代码。其中一套重要的原则就是 **SOLID** (由 Robert C. Martin 首次提出)。

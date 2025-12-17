@@ -1,3 +1,12 @@
+---
+title: 解析 Gin 框架底层原理
+description: 深入剖析 Go 语言 Web 框架 Gin 的底层实现机制与设计哲学。
+publishDate: 17 December 2025
+tags:
+  - go
+  - gin
+---
+
 本文将深入分析 **Go Web 框架 Gin** 的底层实现原理，重点探究其核心机制和设计哲学。
 
 ## 1 Gin 与 HTTP

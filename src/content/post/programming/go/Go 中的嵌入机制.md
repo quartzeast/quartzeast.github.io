@@ -3,7 +3,7 @@ title: Go 中的嵌入机制
 description: Go 语言中的嵌入：组合优于继承的实践与示例
 publishDate: 27 June 2024
 tags:
-  - Go
+  - go
 ---
 
 Go 语言并不支持传统意义上的继承，相反，它提倡使用组合 (composition) 作为扩展类型功能的方式。这并不是 Go 独有的理念，组合优于继承 (Composition over inheritance) 是面向对象编程中的一个著名原则，在《设计模式》(Design Patterns) 这本书的第一章就有详细论述。
