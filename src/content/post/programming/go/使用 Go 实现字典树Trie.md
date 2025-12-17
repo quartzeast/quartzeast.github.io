@@ -1,17 +1,26 @@
+---
+title: 使用 Go 实现字典树（Trie）
+description: 通过 Go 语言实现字典树（Trie）数据结构，深入理解其原理与应用。
+publishDate: 10 December 2025
+tags:
+  - go
+  - data-structures
+---
+
 ## 1 前缀树 Trie 概述
 
 ### 1.1 Trie 概念介绍
 
-前缀树 Trie，又称为字典树或者单词查找树，是一种广泛应用于文本词频统计和搜索场景的树状存储结构。
+前缀树 Trie，又称为字典树或者单词查找树，是一种广泛应用于文本词频统计和搜索场景的树存储结构。
 
-Trie 本身是一个多叉树结构，树中的每个节点存储一个字符。它与普通树状数据结构最大的差异在于，存储数据的 key 不存放于单个节点中，而是由从根节点 root 出发直到抵达目标节点 target node 之间的沿途路径组成。基于这样的构造方式，拥有相同前缀的字符串可以复用公共的父节点，直到在首次出现不同字符的位置才出现节点分叉，最终形成多叉树状结构。
+Trie 本身是一个多叉树结构，树中的每个节点存储一个字符。它与普通树数据结构最大的差异在于，存储数据的 key 不存放于单个节点中，而是由从根节点 root 出发直到抵达目标节点 target node 之间的沿途路径组成。基于这样的构造方式，拥有相同前缀的字符串可以复用公共的父节点，直到在首次出现不同字符的位置才出现节点分叉，最终形成多叉树结构。
 
 下面我们通过一个案例加以说明：
 
-![](v2-7d0a1fb4dfa21654754b42e733adc9e4_1440w.jpg)
+![](./assets/v2-7d0a1fb4dfa21654754b42e733adc9e4_1440w.jpg)
 
 如上图所示，我们描述一下插入 search、see、seat 三个单词的流程：
-/
+
 - 首先，Trie 的根节点 root 内容为空。root 是所有节点的祖先、所有路径的起点
 - 由于三个单词都有着公共的前缀 se，因此共享父节点 s、e
 - 接下来，see 由于第三个字符为 e，与其他两个单词不同，因此 see 单独分叉出节点 e
@@ -22,7 +31,7 @@ Trie 本身是一个多叉树结构，树中的每个节点存储一个字符。
 
 ### 1.2 Trie 应用介绍
 
-基于 Trie 的特性，有一类很常用的应用场景就是搜索提示。比如当输入一个网址时，可以通过 Trie 识别出用户可能的输入；当没有完全匹配的搜索结果时，也可以基于前缀返回最相似的可能。
+基于 Trie 的特性，有一类很常用的应用场景就是搜索提示。比如当输入一个网址时，可以通过 Trie 识别出用户可能的输入；当没有完全匹配的搜索结果时，也可以基于前缀返回最相似的可能输入。
 
 除此之外，Trie 存在另一个让我印象深刻的使用案例——GeoHash 算法。
 
@@ -30,7 +39,7 @@ Trie 本身是一个多叉树结构，树中的每个节点存储一个字符。
 
 由于 GeoHash 这种基于公共前缀圈定距离的实现方式，因此我们在存储基于 GeoHash 生成的大量位置信息时，通常会优先考虑使用 Trie 树作为实现的数据结构。
 
-![](v2-eb6eef60ba9072684b310cf5bb3c04aa_1440w.jpg)
+![](./assets/v2-eb6eef60ba9072684b310cf5bb3c04aa_1440w.jpg)
 
 上图是 GeoHash 实现思路的简单示例。
 
@@ -42,15 +51,12 @@ Trie 本身是一个多叉树结构，树中的每个节点存储一个字符。
 
 - 题号：208
 - 题名：实现 Trie（前缀树）
-- 链接：[https://leetcode.cn/problems/implement-trie-prefix-tree/](https://leetcode.cn/problems/implement-trie-prefix-tree/)
-
-![](v2-5e01491485b8f050b6b8e415e05dc650_1440w.jpg)
 
 ### 2.2 核心数据结构
 
 下面，我们就进入实战环节，一起通过 Go 语言来从零到一实现一棵 Trie 树：
 
-![](v2-af88feddfa10f7b381d2ba7e5b02f54b_1440w.jpg)
+![](./assets/v2-af88feddfa10f7b381d2ba7e5b02f54b_1440w.jpg)
 
 首先针对 Trie 树中的节点 node，我们进行类型定义：
 
@@ -67,17 +73,17 @@ type trieNode struct {
 }
 ```
 
-trieNode 中包含几个核心字段：
+`trieNode` 中包含几个核心字段：
 
-- `passCnt`：记录通过当前节点的单词数量。即，以根节点到当前节点所形成字符串作为前缀的单词数量
+- `passCnt`：记录通过当前节点的单词数量。即，从根节点到当前节点所形成字符串作为前缀的单词数量
 - `end`：标识是否存在单词以当前节点为结尾。即，存在以从根节点到当前节点所形成字符串作为内容的单词
-- `nexts`：子节点列表。Trie 树通过这一项，形成了父子节点一对多的映射关系，最终形成了多叉树的拓扑结构
+- `nexts`：子节点列表。Trie 树通过这一字段，形成了父子节点一对多的映射关系，最终形成了多叉树的拓扑结构
 
 在本轮实现中，我们将单词的字符限定为 a-z 组成的 26 个小写字母。在每个节点对应的 nexts 切片中，`nexts[0]` 表示下一个节点对应字符为 `'a'`，`nexts[1]` 对应为 `'b'`，以此类推，直到 `nexts[25]` 对应为 `'z'`。
 
-![](v2-2ea81308b96f3e7ee85665eba08ea443_1440w.jpg)
+![](./assets/v2-2ea81308b96f3e7ee85665eba08ea443_1440w.jpg)
 
-下面是关于前缀树 Trie 的定义，定义很简单，Trie 中需要持有一个根节点 root 即可。其中 root 是所有 trieNode 节点的祖先，其本身对应的字符为空。
+下面是关于前缀树 Trie 的定义，Trie 中需要持有一个根节点 root 即可。其中 root 是所有 trieNode 节点的祖先，其本身对应的字符为空。
 
 ```go
 type Trie struct {
@@ -103,16 +109,15 @@ func (t *Trie) Search(word string) bool {
 }
 ```
 
-- Trie.Search 方法通过调用 Trie.search 方法，查找满足从根节点开始到抵达该节点所形成字符串恰好等于检索单词 word 的目标节点
-- 如果节点存在，并且节点的 end 标识为 true，代表 word 存在
+- `Trie.Search` 方法通过调用 `Trie.search` 方法，查找满足从根节点开始到抵达该节点所形成字符串恰好等于检索单词 `word` 的目标节点
+- 如果节点存在，并且节点的 `end` 标识为 `true`，代表 `word` 存在
 
-![](v2-5a299b50d51ffd4f2039b2b67374e5fd_1440w.jpg)
+![](./assets/v2-5a299b50d51ffd4f2039b2b67374e5fd_1440w.jpg)
 
-下面是 Trie.search 方法的源码：
-
+下面是 `Trie.search` 方法的源码：
 ```go
 func (t *Trie) search(target string) *trieNode {
-    // 移动指针从根节点出发
+    // 从根节点出发移动指针
     move := t.root
     // 依次遍历 target 中的每个字符
     for _, ch := range target {
@@ -131,22 +136,22 @@ func (t *Trie) search(target string) *trieNode {
 }
 ```
 
-在 Trie.search 方法中：
+在 `Trie.search` 方法中：
 
-- 移动指针 move 从 trie 的根节点 root 出发
-- 依次遍历 word 中的字符，查看 move 的子节点列表 nexts 中否存在对应于该字符的子节点
+- 移动指针 `move` 从 trie 的根节点 `root` 出发
+- 依次遍历 `word` 中的字符，查看 `move` 的子节点列表 `nexts` 中是否存在对应于该字符的子节点
 - 如果对应子节点不存在，说明目标不存在
-- 如果子节点存在，则将 move 指向该子节点，开始下一轮遍历
-- 当遍历结束时，此时 move 对应的一定是 target 末尾的字符，直接返回 move 指向的节点
-- 在外层方法 Trie.Search 中，会通过该节点的 end 标识，判断是否确实存在单词以该节点作为结尾
+- 如果子节点存在，则将 `move` 指向该子节点，开始下一轮遍历
+- 当遍历结束时，此时 `move` 对应的一定是 `target` 末尾的字符，直接返回 `move` 指向的节点
+- 在外层方法 `Trie.Search` 中，会通过该节点的 `end` 标识，判断是否存在单词以该节点作为结尾
 
 ### 2.4 前缀匹配流程
 
-下面是查看 trie 中是否存在单词以指定 prefix 作为前缀的处理流程.
+下面是查看 trie 中是否存在单词以指定 prefix 作为前缀的处理流程。
 
-在 StartsWith 方法中，通过调用 trie.search 方法，返回全路径对应为 prefix 的节点. 根据该节点存在与否，可以判断出是否存在单词使用到了 prefix 前缀.
+在 `StartsWith` 方法中，通过调用 `trie.search` 方法，返回全路径对应为 `prefix` 的节点。根据该节点存在与否，可以判断出是否存在单词包括 `prefix` 前缀。
 
-StartsWith 流程与 Search 流程的区别在于，StartsWith 无需对节点的 end 标识进行判断，因为此时我们的查询条件更宽松，只需要作前缀匹配，而非精确匹配。
+`StartsWith` 流程与 `Search` 流程的区别在于，`StartsWith` 无需对节点的 `end` 标识进行判断，因为此时我们的查询条件更宽松，只需要作前缀匹配，而非精确匹配。
 
 ```go
 func (t *Trie) StartsWith(prefix string) bool {
@@ -168,13 +173,13 @@ func (t *Trie) PassCnt(prefix string) int {
 }
 ```
 
-关于这一点，我们保证在后续处理单词插入的 Insert 流程以及单词删除的 Erase 流程中，对每个节点维护好一个 passCnt 计数器，用于记录通过该节点的单词数量。
+关于这一点，我们保证在后续处理单词插入的 `Insert` 流程以及单词删除的 `Erase` 流程中，对每个节点维护好一个 `passCnt` 计数器，用于记录通过该节点的单词数量。
 
-因此在此处的 PassCnt 流程中，我们只需要根据 prefix 找到对应节点，然后直接返回节点对应的 passCnt 值即可。
+因此在此处的 `PassCnt` 流程中，我们只需要根据 `prefix` 找到对应节点，然后直接返回节点对应的 `passCnt` 值即可。
 
 ### 2.6 插入流程
 
-![](v2-fa42b1d7bcc960a91cb66e8165fbaa67_1440w.jpg)
+![](./assets/v2-fa42b1d7bcc960a91cb66e8165fbaa67_1440w.jpg)
 
 下面展示了将一个单词 word 插入到 Trie 树对应流程的实现源码：
 
@@ -184,11 +189,11 @@ func (t *Trie) Insert(word string) {
     move.passCnt++
 
     for _, ch := range word {
-        idx := ch - 'a'
-        if move.nexts[idx] == nil {
-            move.nexts[idx] = &trieNode{}
+        i := ch - 'a'
+        if move.nexts[i] == nil {
+            move.nexts[i] = &trieNode{}
         }
-        move = move.nexts[idx]
+        move = move.nexts[i]
         move.passCnt++
     }
 
@@ -217,13 +222,13 @@ func (t *Trie) Erase(word string) bool {
     move.passCnt--
 
     for _, ch := range word {
-        idx := ch - 'a'
+        i := ch - 'a'
         // 如果子节点的 passCnt 减为 0，说明没有其他单词共享这个前缀，可以直接删除
-        if move.nexts[idx].passCnt-1 == 0 {
-            move.nexts[idx] = nil
+        if move.nexts[i].passCnt-1 == 0 {
+            move.nexts[i] = nil
             return true
         }
-        move = move.nexts[idx]
+        move = move.nexts[i]
         move.passCnt--
     }
 
@@ -247,9 +252,9 @@ func (t *Trie) Erase(word string) bool {
 
 ### 3.1 Radix Tree 概念介绍
 
-从第 3 章开始，我们一起聊一个前缀树 Trie 的升级版本——压缩前缀树/基数树 Radix Tree。
+——压缩前缀树/基数树 Radix Tree 是前缀树 Trie 的升级版本。
 
-Radix Tree 是一种更加节省空间的 Trie。首先，Radix Tree 继承了来自 Trie 的基本设定，本身也是基于多叉树数据结构实现。在树中，每个节点对应一段相对路径，最终从根节点到某个节点之间沿途路径的所有相对路径拼接在一起后形成的绝对路径，即为该节点对应的标识键 key。
+Radix Tree 是一种更加节省空间的 Trie。首先，Radix Tree 继承了来自 Trie 的基本设定，本身也是基于多叉树数据结构实现。在树中，每个节点对应一段相对路径，最终从根节点到某个节点之间沿途路径的所有相对路径拼接在一起后形成的绝对路径，即为该节点对应的键 key。
 
 Radix Tree 相比于 Trie 而言，核心的区别主要体现在一个处理规则上：
 
@@ -259,7 +264,7 @@ Radix Tree 相比于 Trie 而言，核心的区别主要体现在一个处理规
 
 Radix Tree 的一类常用场景是路由匹配。以插入如下图所示的几条 path 为例，最终生成的压缩前缀树 Radix Tree 如下：
 
-![](v2-93e656b58f6990da1b3ff9cf23a30846_1440w.jpg)
+![](./assets/v2-93e656b58f6990da1b3ff9cf23a30846_1440w.jpg)
 
 可以看到，其中如 `"ba"`、`"se"`、`"nana"`、`"arch"`、`"/v"`、`"app"`、`"le"` 几个部分都基于 Radix Tree 的新规则实现了父子节点之间的压缩合并。
 
@@ -269,22 +274,18 @@ Radix Tree 的一类常用场景是路由匹配。以插入如下图所示的几
 
 关于 Radix Tree 的应用，其中一个很经典的案例就是 Gin 框架中针对路由模块的设计实现。
 
-![](v2-eb7b0d75db615fbf3ed37240b29d735e_1440w.jpg)
-
 在 Gin 框架中，使用 Radix Tree 作为路由树的数据结构，建立了请求路径 pattern 和路径处理函数链 handlers 之间的映射关系。之所以选用 Radix Tree 而非 HashMap，其原因在于：
 
 - 在路由匹配时，除了需要根据请求路径进行精确匹配之外，还有着模糊匹配的诉求。比如请求路径末尾是否包含 `'/'`、通配符 `'*'` 的使用等，这种非单点匹配的操作不适合使用 Map，而 Radix Tree 则能够满足诉求
 - 各路由长度相比于数量而言更加有限，使用 Radix Tree 实现的话可以有更好的性能表现
 
-Radix Tree 具体实现是比较具有难度的，主要在于随着单词的插入和删除，需要对 Radix Tree 结构进行动态调整，涉及到对父子节点的合并和拆分。本文第 4 章内容中对 Radix Tree 的实现借鉴了 Gin 框架。
+Radix Tree 具体实现是比较具难度的，主要在于随着单词的插入和删除，需要对 Radix Tree 结构进行动态调整，涉及到对父子节点的合并和拆分。
 
 ## 4 压缩前缀树 Radix Tree 实现
 
-第 4 章开始，我们展示一下 Radix Tree 的具体实现源码。
-
 ### 4.1 核心数据结构
 
-![](v2-e4e4cd91a5f0fdefa493c6007dedfa75_1440w.jpg)
+![](./assets/v2-e4e4cd91a5f0fdefa493c6007dedfa75_1440w.jpg)
 
 首先，我们需要针对 Radix Tree 中节点的类型进行定义：
 
@@ -309,12 +310,12 @@ type radixNode struct {
 
 - `path`：当前节点对应的相对路径
 - `fullPath`：当前节点对应的前缀路径。指的是从根节点 `root` 出发到达当前节点的过程中，把沿途节点相对路径拼接在一起得到的结果
-- `indices`：后继子节点首字母组合成的字典
+- `indices`：后继子节点首字母组合成的字符串，便于快速定位子节点
 - `children`：后继子节点列表，子节点的顺序需要和 indices 中保持一致
 - `end`：是否存在单词以当前节点作为结尾
 - `passCnt`：存在多少单词，以当前节点作为前缀
 
-![](v2-7e49db44adbd5c5b9b9baa9065fc71c4_1440w.jpg)
+![](./assets/v2-7e49db44adbd5c5b9b9baa9065fc71c4_1440w.jpg)
 
 下面是有关整棵压缩前缀树 Radix Tree 的定义，其中内置了一个根节点 root，并通过子节点列表 children 形成整个树状的拓扑结构。
 
@@ -334,7 +335,7 @@ func NewRadix() *Radix {
 
 ### 4.2 插入流程
 
-![](v2-752060aebe0297cb21bf049b4aba38e1_1440w.jpg)
+![](./assets/v2-752060aebe0297cb21bf049b4aba38e1_1440w.jpg)
 
 往 Radix Tree 中插入一个单词 word 的流程图如上图所示，具体的源码如下所示，在源码中已经针对关键步骤给出了相应的注释：
 
@@ -448,19 +449,19 @@ func (rn *radixNode) insertWord(path, fullPath string) {
 
 下面我们对插入流程的核心步骤进行总结：
 
-- 首先，检查一下 word 是否已存在，如果存在，则终止流程，无需重复操作
-- 以 radix tree 的根节点 root 作为起点，调用 radixNode.insert 方法，执行插入流程
+- 首先，检查一下 `word` 是否已存在，如果存在，则终止流程，无需重复操作
+- 以 radix tree 的根节点 root 作为起点，调用 `radixNode.insert` 方法，执行插入流程
 - 如果此前 radix tree 中从未插入过任何单词，则直接将首个单词插入到 root 当中
-- 开启 for 循环，根据节点的相对路径 path 与插入 word 之间的关系进，进行分类处理：
-- 求出 path 与 word 的公共前缀长度 i
-- 如果公共前缀 i 大于 0，说明 word 必然经过当前节点，需要对 passCnt 计数器加 1
-- 如果公共前缀 i 小于 path 长度，则要将当前节点拆分为公共前缀部分 + 后继剩余部分两个节点
-- 如果公共前缀长度小于 word 长度，则需要继续检查，word 和后继节点是否还有公共前缀，如果有的话，则递归对后继节点执行相同流程
-- 当保证 word 和后继节点不再有公共前缀，则直接将 word 包装成一个新的节点，插入到当前节点的子节点列表 children 当中
+- 开启 `for` 循环，根据节点的相对路径 `path` 与插入 `word` 之间的关系进，进行分类处理：
+- 求出 `path` 与 `word` 的公共前缀长度 i
+- 如果公共前缀 i 大于 0，说明 `word` 必然经过当前节点，需要对 `passCnt` 计数器加 1
+- 如果公共前缀 i 小于 `path` 长度，则要将当前节点拆分为公共前缀部分 + 后继剩余部分两个节点
+- 如果公共前缀长度小于 `word` 长度，则需要继续检查，`word` 和后继节点是否还有公共前缀，如果有的话，则递归对后继节点执行相同流程
+- 当保证 `word` 和后继节点不再有公共前缀，则直接将 `word` 包装成一个新的节点，插入到当前节点的子节点列表 `children` 当中
 
 ### 4.3 查询流程
 
-![](v2-e625b494408fd938a6045b1ffe24664d_1440w.jpg)
+![](./assets/v2-e625b494408fd938a6045b1ffe24664d_1440w.jpg)
 
 查询一个单词 word 是否存在于 Radix Tree 对应的流程如上图所示，具体代码如下所示：
 
@@ -511,10 +512,10 @@ walk:
 
 上述源码的核心步骤总结如下：
 
-- 调用 radix tree 根节点 root 对应的 search 方法，开启查询流程
-- 倘若 word 内容刚好和节点 path 相等，则返回节点，并在上层通过节点的 end 标识，判断是否存在单词以当前节点结尾
-- 倘若 word 以节点 path 作为前缀，则查看后继节点是否还与 path 存在公共前缀，如果是的话，将节点指针指向后继节点，递归开启后续流程
-- 除此之外，都说明 word 不存于 radix tree 中，直接终止流程
+- 调用 radix tree 根节点 root 对应的 `search` 方法，开启查询流程
+- 倘若 `word` 内容刚好和节点 `path` 相等，则返回节点，并在上层通过节点的 `end` 标识，判断是否存在单词以当前节点结尾
+- 倘若 `word` 以节点 `path` 作为前缀，则查看后继节点是否还与 `path` 存在公共前缀，如果是的话，将节点指针指向后继节点，递归开启后续流程
+- 除此之外，都说明 `word` 不存于 radix tree 中，直接终止流程
 
 ### 4.4 前缀匹配流程
 
